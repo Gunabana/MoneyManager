@@ -213,32 +213,55 @@ async def delete_all_expenses(token: str = Header(None)):
         token (str): Authentication token.
 
     Returns:
-        dict: Message indicating the number of expenses deleted and the updated balance.
+        dict: Message indicating the number of expenses deleted and updated balances for each account.
     """
     user_id = await verify_token(token)
     
-    # Step 1: Retrieve all expenses to calculate their total amount
+    # Step 1: Retrieve all expenses to calculate their total amounts for each account
     expenses = await expenses_collection.find({"user_id": user_id}).to_list(None)
-    total_expenses_amount = sum(expense['amount'] for expense in expenses)
     
-    # Step 2: Delete the expenses
+    if not expenses:
+        raise HTTPException(status_code=404, detail="No expenses found to delete")
+    
+    # Step 2: Initialize a dictionary to store total expenses per account
+    total_expenses_by_account = {}
+    
+    for expense in expenses:
+        account_name = expense["account_name"]
+        account = await accounts_collection.find_one({"user_id": user_id, "name": account_name})
+        
+        if not account:
+            continue  # If the account doesn't exist, skip it (this should ideally raise an error)
+        
+        # Convert the expense amount to the account's currency
+        converted_amount = convert_currency(expense["amount"], expense["currency"], account["currency"])
+        
+        if account_name in total_expenses_by_account:
+            total_expenses_by_account[account_name] += converted_amount
+        else:
+            total_expenses_by_account[account_name] = converted_amount
+    
+    # Step 3: Delete all expenses
     result = await expenses_collection.delete_many({"user_id": user_id})
     
     if result.deleted_count > 0:
-        # Step 3: Update the user's account balance
-        account = await account_collection.find_one({"user_id": user_id})
-        new_balance = account['balance'] - total_expenses_amount
-        await account_collection.update_one(
-            {"user_id": user_id}, 
-            {"$set": {"balance": new_balance}}
-        )
+        # Step 4: Update the balances for each account
+        updated_balances = {}
+        for account_name, total_expenses in total_expenses_by_account.items():
+            account = await accounts_collection.find_one({"user_id": user_id, "name": account_name})
+            if account:
+                new_balance = account["balance"] - total_expenses
+                await accounts_collection.update_one(
+                    {"_id": account["_id"]}, {"$set": {"balance": new_balance}}
+                )
+                updated_balances[account_name] = new_balance
         
         return {
             "message": f"{result.deleted_count} expenses deleted successfully",
-            "updated_balance": new_balance
+            "updated_balances": updated_balances
         }
     
-    raise HTTPException(status_code=404, detail="No expenses found to delete")
+    raise HTTPException(status_code=500, detail="Failed to delete expenses")
 
 
 
