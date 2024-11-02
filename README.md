@@ -7,32 +7,45 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # Money Manager
+<div align="center">
+  <img src="docs/logo/logo.png" alt="Project Logo" width="300"/>
+</div>
 
-A REST API application for managing expenses. Build your own automation, be it telegram bot, discord or your own app.
 
-![built_with_love](http://ForTheBadge.com/images/badges/built-with-love.svg)
+A REST API application for managing expenses. Build your own automation—be it a Telegram bot 🤖, Discord bot, or your own app 📱!
+
+🚨 Spoiler Alert! 🚨 We have built a Telegram bot as a proof of concept! 🤖🎉
+
+<div align="center">
+  <img src="http://ForTheBadge.com/images/badges/built-with-love.svg" alt="built_with_love"/>
+</div>
+
+
+
 
 ---
 
 ### Project Overview
 
-[OQ2VT6SUVFMABVEH.mp4](./OQ2VT6SUVFMABVEH.mp4).
+https://github.com/user-attachments/assets/91fdf9e0-9489-4e05-ab61-a7599e5463e1
 
 #### Quality
 
-[![badge_pytest_status](https://img.shields.io/badge/PyTest-passing-brightgreen?style=plastic&logo=pytest&logoColor=white)](https://github.com/gitsetgopack/MoneyManager/actions/runs/11638428169)
-[![badge_code_coverage](https://img.shields.io/badge/coverage-95%25-brightgreen?style=plastic)](https://github.com/gitsetgopack/MoneyManager/actions/runs/11638428169)
-[![badge_total_tests](https://img.shields.io/badge/tests-103-blue?style=plastic&logo=pytest&logoColor=white)](https://github.com/gitsetgopack/hw2/tree/main/tests)
-[![badge_pylint](https://img.shields.io/badge/pylint-10.00-brightgreen?style=plastic)](https://github.com/gitsetgopack/MoneyManager/actions/runs/11638428169)
-[![badge_black](https://img.shields.io/badge/black_formatter-passing-brightgreen?style=plastic&labelColor=black)](https://github.com/gitsetgopack/MoneyManager/actions/runs/11638428169)
-[![badge_mypy](https://img.shields.io/badge/mypy-passing-brightgreen?style=plastic)](https://github.com/gitsetgopack/MoneyManager/actions/runs/11638428169)
-[![badge_bandit](https://img.shields.io/badge/bandit-passing-brightgreen?style=plastic)](https://github.com/gitsetgopack/MoneyManager/actions/runs/11638428169)
+[![badge_pytest_status](https://img.shields.io/badge/PyTest-passing-brightgreen?style=plastic&logo=pytest&logoColor=white)](https://github.com/gitsetgopack/MoneyManager/actions/runs/11639575982)
+[![badge_code_coverage](https://img.shields.io/badge/coverage-95%25-brightgreen?style=plastic)](https://github.com/gitsetgopack/MoneyManager/actions/runs/11639575982)
+[![badge_total_tests](https://img.shields.io/badge/tests-111-blue?style=plastic&logo=pytest&logoColor=white)](https://github.com/gitsetgopack/hw2/tree/main/tests)
+[![badge_pylint](https://img.shields.io/badge/pylint-10.00-brightgreen?style=plastic)](https://github.com/gitsetgopack/MoneyManager/actions/runs/11639575982)
+[![badge_black](https://img.shields.io/badge/black_formatter-passing-brightgreen?style=plastic&labelColor=black)](https://github.com/gitsetgopack/MoneyManager/actions/runs/11639575982)
+[![badge_mypy](https://img.shields.io/badge/mypy-passing-brightgreen?style=plastic)](https://github.com/gitsetgopack/MoneyManager/actions/runs/11639575982)
+[![badge_bandit](https://img.shields.io/badge/bandit-passing-brightgreen?style=plastic)](https://github.com/gitsetgopack/MoneyManager/actions/runs/11639575982)
 
 #### Standards
 
 ![black](https://img.shields.io/badge/code%20style-black-black?style=plastic&)
 ![license](https://img.shields.io/github/license/gitsetgopack/MoneyManager?style=plastic&)
 ![maintained](https://img.shields.io/badge/Maintained%3F-yes-green.svg?style=plastic&)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14027400.svg)](https://doi.org/10.5281/zenodo.14027400)
+
 
 #### Stats
 
