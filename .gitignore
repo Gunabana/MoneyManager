@@ -141,7 +141,8 @@ expense_record.json
 user.properties
 
 # Virtual environment files
-myenv/*
+myenv*
+venv*
 
 # Don't include patch reject files or patches
 *.rej
