@@ -21,11 +21,15 @@ Welcome to the **MoneyManager** project! This guide will help you set up the env
 
 Before beginning the installation, please ensure you have the following installed:
 
-- **Python** (version 3.8 or higher)
+- **Python** (version 3.12.3 or higher)
 - **Git** (to clone the repository)
 - **Docker** (for running MongoDB in a Docker container during testing)
 
 ## Installation Steps
+
+0. **Please Note**
+
+    The Makefile assumes that python3 can be executed with the name of python.
 
 1. **Clone the Repository**
 
@@ -36,9 +40,28 @@ Before beginning the installation, please ensure you have the following installe
    cd MoneyManager
    ```
 
-2. **Install Dependencies**
+2. **Optional: Setup & Running a Virtual Environment**
+  While optional, if you are developing MoneyManager, it is recommended to run
+  it in a virtual environment. This can be done be done by running the following
+  commands.
 
-   Run the following command to install all required dependencies:
+    #### Setup the Virtual Environment:
+    ```bash
+      python -m venv myvenv
+    ```
+
+    #### Run the Virtual Environment on Mac/Linux:
+    ```bash
+    source myvenv/bin/activate
+    ```
+
+    #### Run the Virtual Environment on Windows:
+    ```
+    myvenv\Scripts\activate
+    ```
+
+3. **Install Dependencies**
+  Run the following command to install all required dependencies:
 
    ```bash
    make install
@@ -48,6 +71,23 @@ Before beginning the installation, please ensure you have the following installe
    - Upgrade `pip` to the latest version.
    - Install the required Python packages as specified in the `requirements.txt`.
    - Install pre-commit hooks.
+
+4. **Create .env file**
+
+    To properly run this system, you will need to set up an ENV file. To do this, create a `.env` file at the root directory of this project. Inside, the contents should contain:
+    ```
+    MONGO_URI=
+    TOKEN_SECRET_KEY=
+    TOKEN_ALGORITHM=
+    API_BIND_HOST=
+    API_BIND_PORT=
+    TELEGRAM_BOT_TOKEN=
+    TELEGRAM_BOT_API_BASE_URL=
+    ```
+    * A TOKEN_SECRET_KEY can be generated on Linux using `openssl rand -base64 64`
+    * A TOKEN_ALGORITHM of `HS256` is recommended
+    * By default, the API host and port will be 0.0.0.0 and 9999 respectively
+    * See the README.md regarding the TOKEN and URL for the telegram bot
 
 ## Available Make Commands
 
@@ -68,7 +108,7 @@ Here are the commands available in the `Makefile` to help you work with the proj
   make run
   ```
 
-  This will execute the FastAPI app located at `api/app.py`.
+  This will execute the FastAPI app located at `api/app.py`.   You may need to run `export PYTHONPATH=/path/to/MoneyManager/:$PYTHONPATH` if you get an error stating the API doesn't exist.
 
 - **test**: Start a MongoDB Docker container, run tests, and clean up after the tests.
   ```bash
@@ -79,6 +119,8 @@ Here are the commands available in the `Makefile` to help you work with the proj
   - Start a MongoDB container to simulate a database for testing.
   - Run all tests using `pytest`.
   - Stop and remove the MongoDB container after testing is complete.
+
+  You may need to run `export PYTHONPATH=/path/to/MoneyManager/:$PYTHONPATH` if you get an error stating the API doesn't exist.
 
 - **fix**: Run code formatting on the `api` directory using `black` and `isort`.
   ```bash
