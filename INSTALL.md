@@ -110,6 +110,20 @@ Here are the commands available in the `Makefile` to help you work with the proj
 
   This will execute the FastAPI app located at `api/app.py`.   You may need to run `export PYTHONPATH=/path/to/MoneyManager/:$PYTHONPATH` if you get an error stating the API doesn't exist.
 
+- **database**: Setup and run the non-testing (live) database.
+  ```bash
+  make database
+  ```
+- **stop_database**: Stop the non-testing (live) database.
+  ``` bash
+  make stop_database
+  ```
+
+- **clear_database**: Clear the non-testing (live) database.
+    ``` bash
+  make clear_database
+  ```
+
 - **test**: Start a MongoDB Docker container, run tests, and clean up after the tests.
   ```bash
   make test
