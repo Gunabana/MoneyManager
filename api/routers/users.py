@@ -111,6 +111,7 @@ async def create_user(user: UserCreate):
 
     return {"message": "User and default accounts created successfully"}
 
+
 @router.post("/login/")
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     """Login a user by generating an access token."""
@@ -147,13 +148,13 @@ async def logout(token: str = Header(...)):
     """Logout a user by deleting their token."""
     # First, verify the token
     user_id = await verify_token(token)
-    
+
     # Delete the token from the database
     result = await tokens_collection.delete_one({"user_id": user_id, "token": token})
-    
+
     if result.deleted_count == 1:
         return {"message": "Logout successful"}
-    
+
     raise HTTPException(status_code=400, detail="Failed to logout")
 
 
@@ -165,6 +166,7 @@ async def get_user(token: str = Header(None)):
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return format_id(user)
+
 
 @router.put("/")
 async def update_user(user_update: UserUpdate, token: str = Header(None)):
