@@ -9,8 +9,8 @@ on:  # yamllint disable-line rule:truthy
       
   push:
     branches:
-    - release/*
-    - bbond/*
+      - release/*
+      - bbond/*
 
 permissions:
   contents: write
