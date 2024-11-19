@@ -8,9 +8,6 @@ install: ## Install dependencies in the virtual environment
 	pip install -r requirements.txt
 	pre-commit install
 
-run_api: ## Run the FastAPI app using the virtual environment
-	python api/app.py
-
 run_webapp:
 	python webapp/manage.py migrate
 	python webapp/manage.py runserver

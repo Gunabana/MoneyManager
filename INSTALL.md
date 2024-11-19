@@ -108,24 +108,20 @@ Here are the commands available in the `Makefile` to help you work with the proj
 - **install**: Install dependencies.
   ```bash
   make install
-  ```
-
-- **run_api**: Run the FastAPI application.
-  ```bash
-  make run_api
-  ```
-
-    This will execute the FastAPI app located at `api/app.py`.   You may need to run `export PYTHONPATH=/path/to/MoneyManager/:$PYTHONPATH` if you get an error stating the API doesn't exist.
+  ``` 
 
 -  **run_webapp**: Run the webapp application.
     ```bash
     make run_webapp
     ```
 
+    You may need to run `export PYTHONPATH=/path/to/MoneyManager/:$PYTHONPATH` if you get an error stating the API doesn't exist. The FastAPI is available at `/api`.
+
 - **start_database**: Setup and run the non-testing (live) database.
   ```bash
   make start_database
   ```
+  
 - **stop_database**: Stop the non-testing (live) database.
   ``` bash
   make stop_database
@@ -179,16 +175,6 @@ Here are the commands available in the `Makefile` to help you work with the proj
 - **Python Compatibility**: Ensure Python is in your system’s `PATH` and meets the required version.
 - **Dependency Issues**: If you encounter issues, check the `requirements.txt` file for compatibility, or re-run `make install` after activating a virtual environment.
 - **Docker Issues**: Make sure Docker is installed and running properly before executing commands that require a MongoDB container.
-
-## Running the Project
-
-After installation, you can run the FastAPI server by executing:
-
-```bash
-make run
-```
-
-This command will start the application, and you can access it in your browser at the specified URL (typically `http://127.0.0.1:8000`).
 
 ## Running Tests
 
