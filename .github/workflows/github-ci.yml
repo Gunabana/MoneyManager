@@ -4,7 +4,13 @@ name: github-ci
 on:  # yamllint disable-line rule:truthy
   pull_request:
     branches:
-      - "release/*"
+      - release/*
+      - bbond/*
+      
+  push:
+    branches:
+    - release/*
+    - bbond/*
 
 permissions:
   contents: write
