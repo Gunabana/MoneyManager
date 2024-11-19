@@ -19,6 +19,9 @@ jobs:
 
   pre-commit:
     runs-on: ubuntu-latest
+    env:
+      TOKEN_ALGORITHM: ${{ secrets.TOKEN_ALGORITHM }}
+      TOKEN_SECRET_KEY: ${{ secrets.TOKEN_SECRET_KEY }}
 
     steps:
       - uses: actions/checkout@v4
@@ -83,7 +86,7 @@ jobs:
         continue-on-error: true
         run: |
           echo "MYPY_EXIT_CODE=0" >> $GITHUB_ENV
-          mypy api || echo "MYPY_EXIT_CODE=1" >> $GITHUB_ENV
+          mypy api || echo "MYPY_EXIT_CODE=1" >> $GITHUB_ENVF
 
       - name: Run Bandit
         continue-on-error: true
