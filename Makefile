@@ -8,10 +8,14 @@ install: ## Install dependencies in the virtual environment
 	pip install -r requirements.txt
 	pre-commit install
 
-run: ## Run the FastAPI app using the virtual environment
+run_api: ## Run the FastAPI app using the virtual environment
 	python api/app.py
 
-database: ## make and run the database
+run_webapp:
+	python webapp/manage.py migrate
+	python webapp/manage.py runserver
+
+start_database: ## make and run the database
 	docker run --name mongo-MM -p 27017:27017 -d mongo:latest
 	@sleep 5  # Wait for MongoDB to be ready
 
@@ -34,7 +38,6 @@ fix: ## Black format and isort on api dir
 	isort api/
 
 clean: ## Clean up Python bytecode files and caches
-	make clear_database
 	@docker stop mongo-test || true
 	@docker rm mongo-test || true
 	(find . -type f \( -name "*.pyc" -o -name ".coverage" -o -name ".python-version" \) -delete && \

@@ -111,6 +111,51 @@ async def create_user(user: UserCreate):
 
     return {"message": "User and default accounts created successfully"}
 
+@router.post("/login/")
+async def login(form_data: OAuth2PasswordRequestForm = Depends()):
+    """Login a user by generating an access token."""
+    user = await users_collection.find_one({"username": form_data.username})
+    if not user or user["password"] != form_data.password:
+        raise HTTPException(status_code=401, detail="Incorrect username or password")
+
+    # Create access token for the user
+    access_token_expires = datetime.timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": str(user["_id"]), "username": user["username"]},
+        expires_delta=access_token_expires,
+    )
+
+    # Store the token in the database if needed
+    result = await tokens_collection.insert_one(
+        {
+            "user_id": str(user["_id"]),
+            "token": access_token,
+            "expires_at": datetime.datetime.now(datetime.UTC) + access_token_expires,
+            "token_type": "bearer",
+        },
+    )
+
+    if result.inserted_id:
+        token_data = await tokens_collection.find_one({"_id": result.inserted_id})
+        return {"message": "Login successful", "access_token": token_data["token"]}
+
+    raise HTTPException(status_code=500, detail="Failed to create token")
+
+
+@router.post("/logout/")
+async def logout(token: str = Header(...)):
+    """Logout a user by deleting their token."""
+    # First, verify the token
+    user_id = await verify_token(token)
+    
+    # Delete the token from the database
+    result = await tokens_collection.delete_one({"user_id": user_id, "token": token})
+    
+    if result.deleted_count == 1:
+        return {"message": "Logout successful"}
+    
+    raise HTTPException(status_code=400, detail="Failed to logout")
+
 
 @router.get("/")
 async def get_user(token: str = Header(None)):
@@ -120,7 +165,6 @@ async def get_user(token: str = Header(None)):
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return format_id(user)
-
 
 @router.put("/")
 async def update_user(user_update: UserUpdate, token: str = Header(None)):

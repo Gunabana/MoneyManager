@@ -89,6 +89,13 @@ Before beginning the installation, please ensure you have the following installe
     * By default, the API host and port will be 0.0.0.0 and 9999 respectively
     * See the README.md regarding the TOKEN and URL for the telegram bot
 
+5. **Starting Application**
+
+    Please reference the Available Make Commands section below. If you
+    simply want to run the webapp on a Linux system (or WSL), run, at the MoneyManager's root directory, `make run_webapp` in one terminal and `make start_database` in a separate terminal. The webapp will be viewable at http://localhost:8000/
+
+
+
 ## Available Make Commands
 
 Here are the commands available in the `Makefile` to help you work with the project:
@@ -98,21 +105,26 @@ Here are the commands available in the `Makefile` to help you work with the proj
   make help
   ```
 
-- **install**: Install dependencies in the virtual environment.
+- **install**: Install dependencies.
   ```bash
   make install
   ```
 
-- **run**: Run the FastAPI application using the virtual environment.
+- **run_api**: Run the FastAPI application.
   ```bash
-  make run
+  make run_api
   ```
 
-  This will execute the FastAPI app located at `api/app.py`.   You may need to run `export PYTHONPATH=/path/to/MoneyManager/:$PYTHONPATH` if you get an error stating the API doesn't exist.
+    This will execute the FastAPI app located at `api/app.py`.   You may need to run `export PYTHONPATH=/path/to/MoneyManager/:$PYTHONPATH` if you get an error stating the API doesn't exist.
 
-- **database**: Setup and run the non-testing (live) database.
+-  **run_webapp**: Run the webapp application.
+    ```bash
+    make run_webapp
+    ```
+
+- **start_database**: Setup and run the non-testing (live) database.
   ```bash
-  make database
+  make start_database
   ```
 - **stop_database**: Stop the non-testing (live) database.
   ``` bash
