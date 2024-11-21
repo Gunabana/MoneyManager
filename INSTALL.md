@@ -91,8 +91,7 @@ Before beginning the installation, please ensure you have the following installe
 
 5. **Starting Application**
 
-    Please reference the Available Make Commands section below. If you
-    simply want to run the webapp on a Linux system (or WSL), run, at the MoneyManager's root directory, `make run_webapp` in one terminal and `make start_database` in a separate terminal. The webapp will be viewable at http://localhost:8000/
+    Please reference Available Make Commands below. If you simply want to run the webapp on a Linux system (or WSL), run the two following commands at the MoneyManager's root directory: 1) `make run` in one terminal and 2) `make start_database` in a second terminal. The webapp will be viewable at http://127.0.0.1:9999/ by default.
 
 
 

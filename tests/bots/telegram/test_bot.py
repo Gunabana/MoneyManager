@@ -3,6 +3,7 @@ from unittest.mock import AsyncMock, patch
 import pytest
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext
+import time
 
 from bots.telegram.bot import (
     categories_command,
@@ -91,3 +92,4 @@ async def test_unified_callback_handlers(
     with patch(f"bots.telegram.bot.{handler_patch}") as mock_handler:
         await unified_callback_query_handler(mock_update, mock_context)
         mock_handler.assert_called_once_with(mock_update.callback_query, mock_context)
+    time.sleep(3)
