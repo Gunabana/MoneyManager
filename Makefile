@@ -8,9 +8,8 @@ install: ## Install dependencies in the virtual environment
 	pip install -r requirements.txt
 	pre-commit install
 
-run_webapp:
-	python webapp/manage.py migrate
-	python webapp/manage.py runserver
+run: ## Run the FastAPI app using the virtual environment
+	python api/app.py
 
 start_database: ## make and run the database
 	docker run --name mongo-MM -p 27017:27017 -d mongo:latest

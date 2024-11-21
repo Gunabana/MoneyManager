@@ -110,12 +110,12 @@ Here are the commands available in the `Makefile` to help you work with the proj
   make install
   ``` 
 
--  **run_webapp**: Run the webapp application.
+-  **run**: Runs the application.
     ```bash
-    make run_webapp
+    make run
     ```
 
-    You may need to run `export PYTHONPATH=/path/to/MoneyManager/:$PYTHONPATH` if you get an error stating the API doesn't exist. The FastAPI is available at `/api`.
+    You may need to run `export PYTHONPATH=/path/to/MoneyManager/:$PYTHONPATH` if you get an error stating the API doesn't exist.
 
 - **start_database**: Setup and run the non-testing (live) database.
   ```bash
