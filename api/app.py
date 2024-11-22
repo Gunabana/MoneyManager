@@ -61,10 +61,19 @@ async def logout(request: Request, response: Response):
 
 @app.get("/landing", response_class=HTMLResponse)
 async def landing_page(request: Request, token: Optional[str] = Header(None)):
-    token = request.cookies.get("access_token") # tokens inherently secure all API points that use then, but for convenience it is better to redirect if tokens are expired
+    token = request.cookies.get("access_token")  # retrieve token from cookies
     if not token:
         return RedirectResponse(url="/login", status_code=302)
-    return templates.TemplateResponse("landing.html", {"request": request})
+
+    try:
+        username = await users.get_username(token)
+        return templates.TemplateResponse("landing.html", {"request": request, "username": username})
+    except HTTPException as e:
+        return RedirectResponse(url="/login", status_code=302)
+    except Exception as e:
+        print(f"Error in landing page: {e}")
+        return RedirectResponse(url="/login", status_code=302)
+
 
 if __name__ == "__main__":
     uvicorn.run("app:app", host=API_BIND_HOST, port=API_BIND_PORT, reload=True)

@@ -181,6 +181,13 @@ async def logout(response: Response, request: Request):
 
     raise HTTPException(status_code=400, detail="Failed to logout")
 
+async def get_username(token: str):
+    """Get user's username."""
+    user_id = await verify_token(token)
+    user = await users_collection.find_one({"_id": ObjectId(user_id)})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user.get('username')
 
 @router.get("/")
 async def get_user(token: str = Header(None)):

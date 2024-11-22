@@ -44,12 +44,7 @@
                 if (response.ok) {
                     const result = await response.json();
                     alert('Login successful!');
-                    console.log('Access Token:', result.access_token); // For debugging, remove in production
-
-                    // Store the JWT token in localStorage
                     localStorage.setItem('access_token', result.access_token);
-
-                    // Redirect to the landing page
                     window.location.href = '/landing';
                 }
                 else {
