@@ -5,7 +5,7 @@ This module defines the main FastAPI application for Money Manager.
 from contextlib import asynccontextmanager
 
 import uvicorn
-from fastapi import FastAPI, Request, Header, Response
+from fastapi import FastAPI, Request, Header, Response, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse
