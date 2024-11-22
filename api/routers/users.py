@@ -6,7 +6,7 @@ import datetime
 from typing import Optional
 
 from bson import ObjectId
-from fastapi import APIRouter, Depends, Header, HTTPException
+from fastapi import APIRouter, Depends, Header, HTTPException, Response, Request
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import jwt
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -113,8 +113,8 @@ async def create_user(user: UserCreate):
 
 
 @router.post("/login/")
-async def login(form_data: OAuth2PasswordRequestForm = Depends()):
-    """Login a user by generating an access token."""
+async def login( response: Response, form_data: OAuth2PasswordRequestForm = Depends()):
+    """Login a user by generating an access token and saving it in a cookie."""
     user = await users_collection.find_one({"username": form_data.username})
     if not user or user["password"] != form_data.password:
         raise HTTPException(status_code=401, detail="Incorrect username or password")
@@ -138,21 +138,45 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 
     if result.inserted_id:
         token_data = await tokens_collection.find_one({"_id": result.inserted_id})
+        # Set the token as a cookie in the response
+        response.set_cookie(
+            key="access_token",
+            # value=token_data["token"],
+            value=access_token,
+            expires=datetime.datetime.now(datetime.UTC) + access_token_expires,
+            httponly=True,  # This ensures the cookie is not accessible via JavaScript
+            secure=False,     # Set to True if using HTTPS, False if HTTP (such as local hosting)
+            samesite="Strict" # Prevents the cookie from being sent with cross-site requests
+        )
         return {"message": "Login successful", "access_token": token_data["token"]}
 
     raise HTTPException(status_code=500, detail="Failed to create token")
 
 
 @router.post("/logout/")
-async def logout(token: str = Header(...)):
+async def logout(response: Response, request: Request):
     """Logout a user by deleting their token."""
-    # First, verify the token
+    # Get the token from the cookie
+    token = request.cookies.get("access_token")
+    if not token:
+        raise HTTPException(status_code=401, detail="No access token found")
+
+    # Verify the token
     user_id = await verify_token(token)
 
     # Delete the token from the database
     result = await tokens_collection.delete_one({"user_id": user_id, "token": token})
 
     if result.deleted_count == 1:
+        # ensure parameters match between login and logout for setting the cookie
+        response.set_cookie( # invalidate the cookie
+            "access_token",
+            expires=datetime.datetime.now(datetime.UTC) - datetime.timedelta(days=1),            max_age=0,
+            httponly=True,
+            secure=False,
+            samesite="Strict",
+            path="/"
+        )
         return {"message": "Logout successful"}
 
     raise HTTPException(status_code=400, detail="Failed to logout")
