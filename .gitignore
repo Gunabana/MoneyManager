@@ -143,6 +143,7 @@ user.properties
 # Virtual environment files
 myenv*
 venv*
+myvenv*
 
 # Don't include patch reject files or patches
 *.rej
