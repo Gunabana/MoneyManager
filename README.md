@@ -49,16 +49,16 @@ https://github.com/user-attachments/assets/91fdf9e0-9489-4e05-ab61-a7599e5463e1
 
 ### Stats
 
-![pr_open](https://img.shields.io/github/issues-pr/gitsetgopack/MoneyManager?style=plastic&)
-![pr_close](https://img.shields.io/github/issues-pr-closed/gitsetgopack/MoneyManager?style=plastic&)
-![issue_open](https://img.shields.io/github/issues/gitsetgopack/MoneyManager.svg?style=plastic&)
-![issue_close](https://img.shields.io/github/issues-closed/gitsetgopack/MoneyManager.svg?style=plastic&)
+![pr_open](https://img.shields.io/github/issues-pr/Gunabana/MoneyManager?style=plastic&)
+![pr_close](https://img.shields.io/github/issues-pr-closed/Gunabana/MoneyManager?style=plastic&)
+![issue_open](https://img.shields.io/github/issues/Gunabana/MoneyManager.svg?style=plastic&)
+![issue_close](https://img.shields.io/github/issues-closed/Gunabana/MoneyManager.svg?style=plastic&)
 
 ![commits_since_last_project](https://img.shields.io/github/commits-since/gitsetgopack/MoneyManager/v2023.f.3.svg?style=plastic&)
-![repo_size](https://img.shields.io/github/repo-size/gitsetgopack/MoneyManager?style=plastic&)
-![forks](https://img.shields.io/github/forks/gitsetgopack/MoneyManager?style=plastic&)
-![stars](https://img.shields.io/github/stars/gitsetgopack/MoneyManager?style=plastic&)
-![downloads](https://img.shields.io/github/downloads/gitsetgopack/MoneyManager/total?style=plastic&)
+![repo_size](https://img.shields.io/github/repo-size/Gunabana/MoneyManager?style=plastic&)
+![forks](https://img.shields.io/github/forks/Gunabana/MoneyManager?style=plastic&)
+![stars](https://img.shields.io/github/stars/Gunabana/MoneyManager?style=plastic&)
+![downloads](https://img.shields.io/github/downloads/Gunabana/MoneyManager/total?style=plastic&)
 
 #### Tools & Technologies
 
@@ -110,9 +110,12 @@ Each tool is an essential part of the development and deployment process, enhanc
 
 ## Installation
 
-### Pre-requisite Tasks
+### Webapp
+Please refer to the [INSTALL.md](INSTALL.md) file.
 
-To get started, you'll need to create a Telegram bot through BotFather:
+### Telegram: Preinstall
+
+You'll need to create a Telegram bot through BotFather:
 
 1. Open the Telegram app (desktop or mobile), search for "BotFather," and click on "Start."
 2. Send the following command to BotFather:
@@ -124,7 +127,7 @@ To get started, you'll need to create a Telegram bot through BotFather:
 - Select a username ending with "bot" (required by Telegram).
 5. BotFather will confirm your bot's creation and provide an HTTP API access token—save this token for later.
 
-### Actual Installation
+### Telegram: Installation
 
 These instructions guide you through setting up the bot's communication and running it:
 
@@ -207,8 +210,13 @@ By contributing to MoneyManager, you agree that your contributions will fall und
 
 ## 🤝 Contributors
 
-Listed alphabetically:
+Current Team:
+- **Brody Bond** ([bbond@ncsu.edu](mailto:bbond@ncsu.edu))
+- **Tristan Hall** ([tdhall6@ncsu.edu](mailto:tdhall6@ncsu.edu))
+- **Chaitanya Nagulapalli** ([cknagula@ncsu.edu](mailto:cknagula@ncsu.edu))
 
+
+Prior Team:
 - **Abhishek Rao** ([arao23@ncsu.edu](mailto:arao23@ncsu.edu))
 - **Astha Bhalodiya** ([abhalod@ncsu.edu](mailto:abhalod@ncsu.edu))
 - **Umang Diyora** ([udiyora@ncsu.edu](mailto:udiyora@ncsu.edu))
