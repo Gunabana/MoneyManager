@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money Manager - Expenses</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+
+        footer {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .form-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .form-container input,
+        .form-container button {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .expense-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .expense-item {
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            background-color: #f5f5f5;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Money Manager</h1>
+    </header>
+    <main>
+        <div class="container">
+            <p>Welcome, {{username}}.</p>
+            <p>This page is accessible after logging in (validated with a JWT token).</p>
+            <p><a href="/logout">Logout</a></p>
+
+            <h2>Expenses</h2>
+            <ul id="expenses" class="expense-list"></ul>
+
+            <h3>Add New Expense</h3>
+            <div class="form-container">
+                <input type="text" id="expense-description" placeholder="Expense Description" required>
+                <input type="number" id="expense-amount" placeholder="Amount" required>
+                <input type="text" id="expense-currency" placeholder="Currency (e.g., USD)" required>
+                <input type="text" id="expense-category" placeholder="Category (e.g., Food)" required>
+                <input type="text" id="expense-account" placeholder="Account Name (e.g., Checking)" required>
+                <input type="date" id="expense-date" required>
+                <button id="add-expense-btn">Add Expense</button>
+                <div id="error-message" class="error-message"></div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>© 2024 Money Manager. All rights reserved.</p>
+    </footer>
+
+    <script>
+        async function fetchAndDisplayExpenses() {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                alert('You need to log in first.');
+                window.location.href = '/login';
+                return;
+            }
+
+            try {
+                const response = await fetch('/expenses/', {
+                    method: 'GET',
+                    headers: {
+                        'token': token,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    displayExpenses(data.expenses);
+                } else {
+                    const error = await response.json();
+                    document.getElementById('error-message').textContent = error.detail || 'Failed to fetch expenses.';
+                }
+            } catch (error) {
+                document.getElementById('error-message').textContent = 'An error occurred. Please try again later.';
+            }
+        }
+
+        function displayExpenses(expenses) {
+            const expensesList = document.getElementById('expenses');
+            expensesList.innerHTML = '';
+
+            if (!expenses || expenses.length === 0) {
+                expensesList.innerHTML = '<li>No expenses found.</li>';
+                return;
+            }
+
+            expenses.forEach(expense => {
+                const expenseItem = document.createElement('li');
+                expenseItem.className = 'expense-item';
+                expenseItem.textContent = `Description: ${expense.description}, Amount: ${expense.amount} ${expense.currency}, 
+                                            Category: ${expense.category}, Account: ${expense.account_name}, Date: ${new Date(expense.date).toLocaleDateString()}`;
+                expensesList.appendChild(expenseItem);
+            });
+        }
+
+        async function addExpense() {
+            const description = document.getElementById('expense-description').value.trim();
+            const amount = parseFloat(document.getElementById('expense-amount').value.trim());
+            const currency = document.getElementById('expense-currency').value.trim();
+            const category = document.getElementById('expense-category').value.trim();
+            const accountName = document.getElementById('expense-account').value.trim();
+            const date = document.getElementById('expense-date').value;
+            const token = localStorage.getItem('access_token');
+
+            if (!description || isNaN(amount) || !currency || !category || !accountName || !date) {
+                document.getElementById('error-message').textContent = 'All fields are required and must be valid.';
+                return;
+            }
+
+            try {
+                const response = await fetch('/expenses/', {
+                    method: 'POST',
+                    headers: {
+                        'token': token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        description: description,
+                        amount: amount,
+                        currency: currency,
+                        category: category,
+                        account_name: accountName,
+                        date: date
+                    })
+                });
+
+                if (response.ok) {
+                    fetchAndDisplayExpenses(); // Refresh expense list
+                    document.getElementById('expense-description').value = '';
+                    document.getElementById('expense-amount').value = '';
+                    document.getElementById('expense-currency').value = '';
+                    document.getElementById('expense-category').value = '';
+                    document.getElementById('expense-account').value = '';
+                    document.getElementById('expense-date').value = '';
+                    document.getElementById('error-message').textContent = '';
+                } else {
+                    const error = await response.json();
+                    document.getElementById('error-message').textContent = error.detail || 'Failed to add expense.';
+                }
+            } catch (error) {
+                document.getElementById('error-message').textContent = 'An error occurred. Please try again later.';
+            }
+        }
+
+        document.getElementById('add-expense-btn').addEventListener('click', addExpense);
+
+        // Load expenses on page load
+        window.onload = fetchAndDisplayExpenses;
+    </script>
+</body>
+</html>

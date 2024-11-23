@@ -74,6 +74,51 @@ async def landing_page(request: Request, token: Optional[str] = Header(None)):
         print(f"Error in landing page: {e}")
         return RedirectResponse(url="/login", status_code=302)
 
+@app.get("/categories", response_class=HTMLResponse)
+async def landing_page(request: Request, token: Optional[str] = Header(None)):
+    token = request.cookies.get("access_token")  # retrieve token from cookies
+    if not token:
+        return RedirectResponse(url="/login", status_code=302)
+
+    try:
+        username = await users.get_username(token)
+        return templates.TemplateResponse("categories.html", {"request": request, "username": username})
+    except HTTPException as e:
+        return RedirectResponse(url="/landing", status_code=302)
+    except Exception as e:
+        print(f"Error in landing page: {e}")
+        return RedirectResponse(url="/landing", status_code=302)
+
+@app.get("/expenses", response_class=HTMLResponse)
+async def landing_page(request: Request, token: Optional[str] = Header(None)):
+    token = request.cookies.get("access_token")  # retrieve token from cookies
+    if not token:
+        return RedirectResponse(url="/login", status_code=302)
+
+    try:
+        username = await users.get_username(token)
+        return templates.TemplateResponse("expenses.html", {"request": request, "username": username})
+    except HTTPException as e:
+        return RedirectResponse(url="/landing", status_code=302)
+    except Exception as e:
+        print(f"Error in landing page: {e}")
+        return RedirectResponse(url="/landing", status_code=302)
+
+@app.get("/barchart", response_class=HTMLResponse)
+async def landing_page(request: Request, token: Optional[str] = Header(None)):
+    token = request.cookies.get("access_token")  # retrieve token from cookies
+    if not token:
+        return RedirectResponse(url="/login", status_code=302)
+
+    try:
+        username = await users.get_username(token)
+        return templates.TemplateResponse("barchart.html", {"request": request, "username": username})
+    except HTTPException as e:
+        return RedirectResponse(url="/landing", status_code=302)
+    except Exception as e:
+        print(f"Error in landing page: {e}")
+        return RedirectResponse(url="/landing", status_code=302)
+
 
 if __name__ == "__main__":
     uvicorn.run("app:app", host=API_BIND_HOST, port=API_BIND_PORT, reload=True)
