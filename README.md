@@ -44,7 +44,8 @@ https://github.com/user-attachments/assets/91fdf9e0-9489-4e05-ab61-a7599e5463e1
 ![black](https://img.shields.io/badge/code%20style-black-black?style=plastic&)
 ![license](https://img.shields.io/github/license/gitsetgopack/MoneyManager?style=plastic&)
 ![maintained](https://img.shields.io/badge/Maintained%3F-yes-green.svg?style=plastic&)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14027400.svg)](https://doi.org/10.5281/zenodo.14027400)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14027400.svg)](https://doi.org/10.5281/zenodo.14027400) 
+<!-- TODO: UPDATED DOI -->
 
 
 ### Stats
@@ -53,7 +54,7 @@ https://github.com/user-attachments/assets/91fdf9e0-9489-4e05-ab61-a7599e5463e1
 ![pr_close](https://img.shields.io/github/issues-pr-closed/Gunabana/MoneyManager?style=plastic&)
 ![issue_open](https://img.shields.io/github/issues/Gunabana/MoneyManager.svg?style=plastic&)
 ![issue_close](https://img.shields.io/github/issues-closed/Gunabana/MoneyManager.svg?style=plastic&)
-
+<!-- TODO: UPDATED # COMMITS -->
 ![commits_since_last_project](https://img.shields.io/github/commits-since/gitsetgopack/MoneyManager/v2023.f.3.svg?style=plastic&)
 ![repo_size](https://img.shields.io/github/repo-size/Gunabana/MoneyManager?style=plastic&)
 ![forks](https://img.shields.io/github/forks/Gunabana/MoneyManager?style=plastic&)
