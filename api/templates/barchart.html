@@ -77,6 +77,14 @@
     <header>
         <h1>Money Manager - Bar Chart</h1>
     </header>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/landing">Accounts</a>
+        <a href="/categories">Categories</a>
+        <a href="/expenses">expenses</a>
+        <a href="/barchart">barchart</a>
+        <a href="/logout">Logout</a>
+    </nav>
     <main>
         <div class="container">
             <p>Welcome, {{username}}.</p>
@@ -102,53 +110,64 @@
 
     <script>
         async function generateBarChart() {
-            const days = document.getElementById('chart-days').value.trim();
-            const token = localStorage.getItem('access_token');
+            const days = document.getElementById("chart-days").value.trim();
+            const token = localStorage.getItem("access_token");
 
             if (!token) {
-                alert('You need to log in first.');
-                window.location.href = '/login';
+                alert("You need to log in first.");
+                window.location.href = "/login";
                 return;
             }
 
             if (!days || isNaN(days) || days <= 0) {
-                document.getElementById('error-message').textContent = 'Please enter a valid number of days.';
+                document.getElementById("error-message").textContent =
+                    "Please enter a valid number of days.";
                 return;
             }
 
-            const apiUrl = `/barchart/?days=${days}&token=${token}`;
+            const apiUrl = `/analytics/expense/bar?x_days=${days}`;
 
             try {
-                document.getElementById('error-message').textContent = '';
-                document.getElementById('chart-placeholder').textContent = 'Loading chart...';
-                document.getElementById('chart-image').style.display = 'none';
+                document.getElementById("error-message").textContent = "";
+                document.getElementById("chart-placeholder").textContent = "Loading chart...";
+                document.getElementById("chart-image").style.display = "none";
 
+                // Fetch the HTML response from the backend
                 const response = await fetch(apiUrl, {
-                    method: 'GET',
+                    method: "GET",
                     headers: {
-                        'token': token,
-                        'Content-Type': 'application/json'
-                    }
+                        token: token, // Pass the token in the headers
+                        "Content-Type": "text/html",
+                    },
                 });
 
                 if (response.ok) {
-                    const blob = await response.blob();
-                    const imageUrl = URL.createObjectURL(blob);
+                    const htmlContent = await response.text(); // Retrieve the HTML content
 
-                    const chartImage = document.getElementById('chart-image');
-                    chartImage.src = imageUrl;
-                    chartImage.style.display = 'block';
-                    document.getElementById('chart-placeholder').style.display = 'none';
+                    // Inject the HTML into a placeholder div
+                    const chartPlaceholder = document.getElementById("chart-placeholder");
+                    chartPlaceholder.innerHTML = htmlContent; // Render the HTML response
+                    chartPlaceholder.style.display = "block";
+
+                    // Hide the static chart image (if any)
+                    document.getElementById("chart-image").style.display = "none";
                 } else {
-                    const error = await response.json();
-                    document.getElementById('error-message').textContent = error.detail || 'Failed to fetch bar chart.';
+                    const errorText = await response.text(); // Get the error HTML content
+                    console.error("Error response from server:", errorText);
+
+                    document.getElementById("error-message").textContent =
+                        "Failed to fetch bar chart. Please check your input or try again later.";
                 }
             } catch (error) {
-                document.getElementById('error-message').textContent = 'An error occurred. Please try again later.';
+                document.getElementById("error-message").textContent =
+                    "An error occurred. Please try again later.";
+                console.error("Error:", error.message);
             }
         }
 
-        document.getElementById('generate-chart-btn').addEventListener('click', generateBarChart);
+        document
+            .getElementById("generate-chart-btn")
+            .addEventListener("click", generateBarChart);
     </script>
 </body>
 </html>
