@@ -8,8 +8,8 @@ load_dotenv()
 
 MONGO_URI = os.getenv("MONGO_URI", None)
 
-TOKEN_SECRET_KEY = os.getenv("TOKEN_SECRET_KEY", None)
-TOKEN_ALGORITHM = os.getenv("TOKEN_ALGORITHM", None)
+TOKEN_SECRET_KEY = os.getenv("TOKEN_SECRET_KEY")
+TOKEN_ALGORITHM = os.getenv("TOKEN_ALGORITHM")
 
 API_BIND_HOST = os.getenv("API_BIND_HOST", "0.0.0.0")
 API_BIND_PORT = int(os.getenv("API_BIND_PORT", 9999))
