@@ -50,7 +50,9 @@ async def expense_bar(x_days: int, token: str = Header(None)):
     expenses = await expenses_collection.find(date_filter).to_list(length=1000)
 
     if not expenses:
-        raise HTTPException(status_code=404, detail="No expenses found for the specified period")
+        raise HTTPException(
+            status_code=404, detail="No expenses found for the specified period"
+        )
 
     # Convert to DataFrame and process data
     df = pd.DataFrame(expenses)
@@ -124,7 +126,9 @@ async def expense_pie(x_days: int, token: str = Header(None)):
     expenses = await expenses_collection.find(date_filter).to_list(length=1000)
 
     if not expenses:
-        raise HTTPException(status_code=404, detail="No expenses found for the specified period")
+        raise HTTPException(
+            status_code=404, detail="No expenses found for the specified period"
+        )
 
     # Convert to DataFrame and process data
     df = pd.DataFrame(expenses)
