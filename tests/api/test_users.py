@@ -101,7 +101,9 @@ class TestTokenGetter:
             "exp": datetime.datetime.now(datetime.timezone.utc)
             - datetime.timedelta(minutes=1),
         }
-        expired_token = jwt.encode(payload, TOKEN_SECRET_KEY, algorithm=TOKEN_ALGORITHM or "HS256")
+        expired_token = jwt.encode(
+            payload, TOKEN_SECRET_KEY, algorithm=TOKEN_ALGORITHM or "HS256"
+        )
         headers = {"token": expired_token}
 
         # Try to access user details with the expired token
@@ -187,7 +189,9 @@ class TestUserUnauthenticated:
             "exp": datetime.datetime.now(datetime.timezone.utc)
             + datetime.timedelta(minutes=30),
         }
-        fake_token = jwt.encode(payload, TOKEN_SECRET_KEY, algorithm=TOKEN_ALGORITHM or "HS256")
+        fake_token = jwt.encode(
+            payload, TOKEN_SECRET_KEY, algorithm=TOKEN_ALGORITHM or "HS256"
+        )
         headers = {"token": fake_token}
 
         # Try to access user details with the fake token
