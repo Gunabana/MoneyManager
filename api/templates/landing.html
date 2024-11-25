@@ -78,13 +78,21 @@
     <header>
         <h1>Money Manager</h1>
     </header>
-    <nav>
-        <a href="/">Home</a>
-        <a href="/accounts">Accounts</a>
-        <a href="/categories">Categories</a>
-        <a href="/expenses">expenses</a>
-        <a href="/barchart">barchart</a>
-        <a href="/logout">Logout</a>
+    <nav id="navbar" class="navbar navbar-expand-sm navbar-dark sticky-top">
+        <a class="navbar-brand" href=".html">
+            <img src="MoneyManagerLOGO.png" alt="Logo" style="width:40px;">
+        </a>
+        <div class="container-fluid">
+            <nav class="main-nav">
+                <a href="/" style="background-image: url('../../docs/logo/MoneyManagerLOGO.png');"></a>
+                <a href="/landing">Accounts</a>
+                <a href="/categories">Categories</a>
+                <a href="/expenses">expenses</a>
+                <a href="/barchart">barchart</a>
+                <a href="/piechart">piechart</a>
+                <a href="/logout">Logout</a>
+             </nav>
+        </div>
     </nav>
     <main>
         <div class="container">

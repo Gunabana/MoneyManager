@@ -138,8 +138,6 @@ async def landing_page(request: Request, token: Optional[str] = Header(None)):
         print(f"Error in landing page: {e}")
         return RedirectResponse(url="/landing", status_code=302)
 
-<<<<<<< Updated upstream
-=======
 
 @app.get("/piechart", response_class=HTMLResponse)
 async def landing_page(request: Request, token: Optional[str] = Header(None)):
@@ -158,7 +156,6 @@ async def landing_page(request: Request, token: Optional[str] = Header(None)):
         print(f"Error in landing page: {e}")
         return RedirectResponse(url="/landing", status_code=302)
 
->>>>>>> Stashed changes
 
 if __name__ == "__main__":
     uvicorn.run("app:app", host=API_BIND_HOST, port=API_BIND_PORT, reload=True)

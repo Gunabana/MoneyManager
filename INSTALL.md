@@ -115,7 +115,7 @@ Here are the commands available in the `Makefile` to help you work with the proj
     ```
 
     You may need to run `export PYTHONPATH=/path/to/MoneyManager/:$PYTHONPATH` if you get an error stating the API doesn't exist.
-
+#export PYTHONPATH=/mnt/c/Users/Trist/OneDrive/Documents/GitHub/MoneyManager:$PYTHONPATH
 - **start_database**: Setup and run the non-testing (live) database.
   ```bash
   make start_database
