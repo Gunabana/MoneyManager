@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/home.css">    
     <title>Money Manager</title>
     <style>
         body {
@@ -46,14 +48,7 @@
             border-radius: 5px;
         }
 
-        .form-container input,
-        .form-container button {
-            display: block;
-            width: 100%;
-            margin-bottom: 10px;
-            padding: 10px;
-            font-size: 16px;
-        }
+      
 
         .account-list {
             list-style: none;
@@ -76,38 +71,44 @@
 </head>
 <body>
     <header>
-        <h1>Money Manager</h1>
+       
     </header>
     <nav id="navbar" class="navbar navbar-expand-sm navbar-dark sticky-top">
-        <a class="navbar-brand" href=".html">
-            <img src="MoneyManagerLOGO.png" alt="Logo" style="width:40px;">
-        </a>
+       
         <div class="container-fluid">
             <nav class="main-nav">
-                <a href="/" style="background-image: url('../../docs/logo/MoneyManagerLOGO.png');"></a>
+                <a class="navbar-brand" href="/landing">
+                    <img src="logo/MoneyManagerLOGO.png" alt="Logo">
+                </a>
                 <a href="/landing">Accounts</a>
                 <a href="/categories">Categories</a>
                 <a href="/expenses">expenses</a>
-                <a href="/barchart">barchart</a>
-                <a href="/piechart">piechart</a>
-                <a href="/logout">Logout</a>
+               
+                <div class="dropdown">
+                    <button class="dropbtn">Data Chart's
+                      <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="/barchart">Barchart</a>
+                        <a href="/piechart">Piechart</a>
+                    </div>
+                  </div> 
+                <a href="/logout" class="split">Logout</a>
              </nav>
         </div>
     </nav>
     <main>
         <div class="container">
-            <p>Welcome, {{username}}.</p>
-            <p>This should only be accessible after logging in (proven by a JWT token).</p>
-            <p><a href="/logout">Logout</a></p>
+            <h2>Welcome, {{username}}.</h2>
 
             <h2>Accounts</h2>
             <ul id="accounts" class="account-list"></ul>
 
             <h3>Add New Account</h3>
             <div class="form-container">
-                <input type="text" id="account-name" placeholder="Account Name" required>
-                <input type="number" id="account-balance" placeholder="Account Balance" required>
-                <input type="text" id="account-currency" placeholder="Currency (e.g., USD)" required>
+                <input class="input-box" type="text" id="account-name" placeholder="Account Name" required>
+                <input class="input-box" type="number" id="account-balance" placeholder="Account Balance" required>
+                <input class="input-box"type="text" id="account-currency" placeholder="Currency (e.g., USD)" required>
                 <button id="add-account-btn">Add Account</button>
                 <div id="error-message" class="error-message"></div>
             </div>

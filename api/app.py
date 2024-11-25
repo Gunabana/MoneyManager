@@ -3,11 +3,12 @@ This module defines the main FastAPI application for Money Manager.
 """
 
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import Optional
 
 import uvicorn
 from fastapi import FastAPI, Header, HTTPException, Request, Response
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -25,6 +26,7 @@ async def lifespan(_app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="api/static"), name="static")
+app.mount("/logo", StaticFiles(directory="docs/logo"), name="logo")
 
 templates = Jinja2Templates(directory="api/templates")
 
@@ -155,6 +157,14 @@ async def landing_page(request: Request, token: Optional[str] = Header(None)):
     except Exception as e:
         print(f"Error in landing page: {e}")
         return RedirectResponse(url="/landing", status_code=302)
+
+
+@app.get("/docs/logo/MoneyManagerLOGO.png")
+async def get_image():
+    image_path = Path("/docs/logo/MoneyManagerLOGO.png")
+    if not image_path.is_file():
+        return {"error": "image not found"}
+    return FileResponse(image_path)
 
 
 if __name__ == "__main__":

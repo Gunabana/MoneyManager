@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/home.css">  
     <title>Money Manager - Expenses</title>
     <style>
         body {
@@ -23,7 +25,7 @@
 
         main {
             flex: 1;
-            padding: 20px;
+          
         }
 
         footer {
@@ -76,10 +78,34 @@
 </head>
 <body>
     <header>
-        <h1>Money Manager</h1>
     </header>
     <main>
+        <nav id="navbar" class="navbar navbar-expand-sm navbar-dark sticky-top">
+            <a class="navbar-brand" href=".html">
+                <img src="../docs/logo/MoneyManagerLOGO.png" alt="Logo" style="width:40px;">
+            </a>
+            <div class="container-fluid">
+                <nav class="main-nav">
+                    <a href="/" style="background-image: url('../../docs/logo/MoneyManagerLOGO.png');"></a>
+                    <a href="/landing">Accounts</a>
+                    <a href="/categories">Categories</a>
+                    <a href="/expenses">expenses</a>
+                   
+                    <div class="dropdown">
+                        <button class="dropbtn">Data Chart's
+                          <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="/barchart">Barchart</a>
+                            <a href="/piechart">Piechart</a>
+                        </div>
+                      </div> 
+                    <a href="/logout" class="split">Logout</a>
+                 </nav>
+            </div>
+        </nav>
         <div class="container">
+           
             <p>Welcome, {{username}}.</p>
             <p>This page is accessible after logging in (validated with a JWT token).</p>
             <p><a href="/logout">Logout</a></p>
