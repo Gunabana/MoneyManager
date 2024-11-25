@@ -154,3 +154,6 @@ myvenv*
 *data.csv
 expense_history.pdf
 histo.png
+
+# temp files and folders
+tmp*

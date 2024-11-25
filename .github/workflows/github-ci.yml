@@ -1,6 +1,7 @@
+---
 name: github-ci
 
-on:
+on:  # yamllint disable-line rule:truthy
   pull_request:
     branches:
       - release/*
@@ -51,48 +52,98 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - name: Set up Python 3.12
         uses: actions/setup-python@v3
         with:
           python-version: "3.12"
-
-      - name: Build Docker Container for Tests
+      - name: Setup
         run: |
-          docker build -t app-test .
+          mkdir tmp
+          sudo apt-get install -y libxml2-utils
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: Run MongoDB in Docker
+      - name: Format check with black
         run: |
-          docker run --name mongo-test -d -p 27017:27017 mongo:latest
-          sleep 10
+          echo "BLACK_EXIT_CODE=0" >> $GITHUB_ENV
+          black . --check || echo "BLACK_EXIT_CODE=1" >> $GITHUB_ENV
 
-      - name: Run Pytest in Docker
+      - name: Run pylint
         continue-on-error: true
         run: |
-          mkdir -p tmp
-          docker run --rm \
-            --network="host" \
-            -v ${{ github.workspace }}/tmp:/app/tmp \
-            app-test \
-            pytest --cov-report=json:/app/tmp/coverage.json --junitxml=/app/tmp/pytest_output.xml || echo "PYTEST_EXIT_CODE=$?" >> $GITHUB_ENV
+          echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
+          echo "PYLINT_EXIT_CODE=0" >> $GITHUB_ENV
+          pylint api > tmp/pylint_output.txt || echo "PYLINT_EXIT_CODE=$?" >> $GITHUB_ENV
+          cat tmp/pylint_output.txt
 
-      - name: Upload Coverage and Test Results
+      # - name: Run pytest
+      #   continue-on-error: true
+      #   run: |
+      #     echo "PYTEST_EXIT_CODE=0" >> $GITHUB_ENV
+      #     pytest --cov-report=json:tmp/coverage.json --junitxml=tmp/pytest_output.xml || echo "PYTEST_EXIT_CODE=$?" >> $GITHUB_ENV
+
+     - name: Run pytest
+        continue-on-error: true
         run: |
-          echo "Uploading test artifacts..."
-          cat tmp/pytest_output.xml
-          cat tmp/coverage.json
+          echo "PYTEST_EXIT_CODE=0" >> $GITHUB_ENV
+          make test || echo "PYTEST_EXIT_CODE=$?" >> $GITHUB_ENV
 
       - name: Run MyPy
         continue-on-error: true
         run: |
           echo "MYPY_EXIT_CODE=0" >> $GITHUB_ENV
-          mypy api || echo "MYPY_EXIT_CODE=1" >> $GITHUB_ENV
+          mypy api || echo "MYPY_EXIT_CODE=1" >> $GITHUB_ENVF
 
       - name: Run Bandit
         continue-on-error: true
         run: |
           echo "BANDIT_EXIT_CODE=0" >> $GITHUB_ENV
           bandit -r api || echo "BANDIT_EXIT_CODE=1" >> $GITHUB_ENV
+
+      - name: Generate black badge URL
+        run: |
+          BLACK_EXIT_CODE=${{ env.BLACK_EXIT_CODE }}
+          if [ "$BLACK_EXIT_CODE" -eq 0 ]; then
+            BLACK_BADGE_URL="https://img.shields.io/badge/black_formatter-passing-brightgreen?style=plastic&labelColor=black"
+          else
+            BLACK_BADGE_URL="https://img.shields.io/badge/black_formatter-failing-red?style=plastic&labelColor=black"
+          fi
+          echo "BLACK_BADGE_URL=$BLACK_BADGE_URL" >> $GITHUB_ENV
+
+      - name: Generate pylint badge URL
+        run: |
+          SCORE=$(grep -oP '(?<=rated at )[0-9]+\.[0-9]+' tmp/pylint_output.txt)
+          if [ "$(echo "$SCORE < 5" | bc)" -eq 1 ]; then
+            COLOR="red"
+          elif [ "$(echo "$SCORE < 8" | bc)" -eq 1 ]; then
+            COLOR="orange"
+          elif [ "$(echo "$SCORE < 10" | bc)" -eq 1 ]; then
+            COLOR="yellow"
+          else
+            COLOR="brightgreen"
+          fi
+          PYLINT_BADGE_URL="https://img.shields.io/badge/pylint-${SCORE}-${COLOR}?style=plastic"
+          echo "PYLINT_BADGE_URL=$PYLINT_BADGE_URL" >> $GITHUB_ENV
+
+      - name: Generate MyPy badge URL
+        run: |
+          MYPY_EXIT_CODE=${{ env.MYPY_EXIT_CODE }}
+          if [ "$MYPY_EXIT_CODE" -eq 0 ]; then
+            MYPY_BADGE_URL="https://img.shields.io/badge/mypy-passing-brightgreen?style=plastic"
+          else
+            MYPY_BADGE_URL="https://img.shields.io/badge/mypy-failing-red?style=plastic"
+          fi
+          echo "MYPY_BADGE_URL=$MYPY_BADGE_URL" >> $GITHUB_ENV
+
+      - name: Generate Bandit badge URL
+        run: |
+          BANDIT_EXIT_CODE=${{ env.BANDIT_EXIT_CODE }}
+          if [ "$BANDIT_EXIT_CODE" -eq 0 ]; then
+            BANDIT_BADGE_URL="https://img.shields.io/badge/bandit-passing-brightgreen?style=plastic"
+          else
+            BANDIT_BADGE_URL="https://img.shields.io/badge/bandit-failing-red?style=plastic"
+          fi
+          echo "BANDIT_BADGE_URL=$BANDIT_BADGE_URL" >> $GITHUB_ENV
 
       - name: Extract number of tests, coverage, and determine result
         run: |
@@ -113,7 +164,7 @@ jobs:
             COVERAGE_COLOR="yellowgreen"
           elif [ "$COVERAGE" -ge 60 ]; then
             COVERAGE_COLOR="yellow"
-          elif [ "$COVERAGE" -ge 50 ]; then
+          elif [ "$COVERAGE" -ge 50 ]; then  # corrected line
             COVERAGE_COLOR="orange"
           else
             COVERAGE_COLOR="red"
@@ -131,9 +182,13 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git stash
-          git checkout ${{ github.head_ref }}
+          git checkout ${{ github.head_ref   }}
 
           RUN_LOG_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          sed -i '/\[!\[badge_black\]/c\[!\[badge_black\]('"$BLACK_BADGE_URL"')]('"$RUN_LOG_URL"')' README.md
+          sed -i '/\[!\[badge_pylint\]/c\[!\[badge_pylint\]('"$PYLINT_BADGE_URL"')]('"$RUN_LOG_URL"')' README.md
+          sed -i '/\[!\[badge_mypy\]/c\[!\[badge_mypy\]('"$MYPY_BADGE_URL"')]('"$RUN_LOG_URL"')' README.md
+          sed -i '/\[!\[badge_bandit\]/c\[!\[badge_bandit\]('"$BANDIT_BADGE_URL"')]('"$RUN_LOG_URL"')' README.md
           sed -i '/\[!\[badge_total_tests\]/c\[!\[badge_total_tests\]('"$TOTAL_TESTS_BADGE_URL"')](https://github.com/Gunabana/MoneyManager/tree/main/tests)' README.md
           sed -i '/\[!\[badge_code_coverage\]/c\[!\[badge_code_coverage\]('"$CODE_COVERAGE_BADGE_URL"')]('"$RUN_LOG_URL"')' README.md
           sed -i '/\[!\[badge_pytest_status\]/c\[!\[badge_pytest_status\]('"$PYTEST_STATUS_BADGE_URL"')]('"$RUN_LOG_URL"')' README.md
