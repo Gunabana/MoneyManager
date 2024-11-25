@@ -6,7 +6,7 @@ import datetime
 from typing import Optional
 
 from bson import ObjectId
-from fastapi import APIRouter, Depends, Header, HTTPException, Response, Request
+from fastapi import APIRouter, Depends, Header, HTTPException, Request, Response
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import jwt
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -113,7 +113,7 @@ async def create_user(user: UserCreate):
 
 
 @router.post("/login/")
-async def login( response: Response, form_data: OAuth2PasswordRequestForm = Depends()):
+async def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends()):
     """Login a user by generating an access token and saving it in a cookie."""
     user = await users_collection.find_one({"username": form_data.username})
     if not user or user["password"] != form_data.password:
@@ -145,8 +145,8 @@ async def login( response: Response, form_data: OAuth2PasswordRequestForm = Depe
             value=access_token,
             expires=datetime.datetime.now(datetime.UTC) + access_token_expires,
             httponly=True,  # This ensures the cookie is not accessible via JavaScript
-            secure=False,     # Set to True if using HTTPS, False if HTTP (such as local hosting)
-            samesite="Strict" # Prevents the cookie from being sent with cross-site requests
+            secure=False,  # Set to True if using HTTPS, False if HTTP (such as local hosting)
+            samesite="Strict",  # Prevents the cookie from being sent with cross-site requests
         )
         return {"message": "Login successful", "access_token": token_data["token"]}
 
@@ -169,17 +169,19 @@ async def logout(response: Response, request: Request):
 
     if result.deleted_count == 1:
         # ensure parameters match between login and logout for setting the cookie
-        response.set_cookie( # invalidate the cookie
+        response.set_cookie(  # invalidate the cookie
             "access_token",
-            expires=datetime.datetime.now(datetime.UTC) - datetime.timedelta(days=1),            max_age=0,
+            expires=datetime.datetime.now(datetime.UTC) - datetime.timedelta(days=1),
+            max_age=0,
             httponly=True,
             secure=False,
             samesite="Strict",
-            path="/"
+            path="/",
         )
         return {"message": "Logout successful"}
 
     raise HTTPException(status_code=400, detail="Failed to logout")
+
 
 async def get_username(token: str):
     """Get user's username."""
@@ -187,7 +189,8 @@ async def get_username(token: str):
     user = await users_collection.find_one({"_id": ObjectId(user_id)})
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
-    return user.get('username')
+    return user.get("username")
+
 
 @router.get("/")
 async def get_user(token: str = Header(None)):
