@@ -102,7 +102,7 @@ class TestTokenGetter:
             - datetime.timedelta(minutes=1),
         }
         expired_token = jwt.encode(
-            payload, TOKEN_SECRET_KEY, algorithm=TOKEN_ALGORITHM or "HS256"
+            payload, str(TOKEN_SECRET_KEY), algorithm=TOKEN_ALGORITHM or "HS256"
         )
         headers = {"token": expired_token}
 
@@ -190,7 +190,7 @@ class TestUserUnauthenticated:
             + datetime.timedelta(minutes=30),
         }
         fake_token = jwt.encode(
-            payload, TOKEN_SECRET_KEY, algorithm=TOKEN_ALGORITHM or "HS256"
+            payload, str(TOKEN_SECRET_KEY), algorithm=TOKEN_ALGORITHM or "HS256"
         )
         headers = {"token": fake_token}
 
