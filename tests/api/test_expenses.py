@@ -102,7 +102,9 @@ class TestExpenseAdd:
             json={"amount": 50.0, "currency": "USD", "category": "InvalidCategory"},
         )
         assert response.status_code == 400
-        assert response.json()["detail"].startswith("Category is not present in the user account")
+        assert response.json()["detail"].startswith(
+            "Category is not present in the user account"
+        )
 
     async def test_invalid_account(self, async_client_auth: AsyncClient):
         response = await async_client_auth.post(
@@ -158,7 +160,9 @@ class TestExpenseAdd:
         assert datetime.datetime.fromisoformat(
             expense_date
         ), "The date should be a valid ISO datetime"
-        assert expense_date == valid_date, "The date should match the user-provided date"
+        assert (
+            expense_date == valid_date
+        ), "The date should match the user-provided date"
 
     async def test_invalid_date(self, async_client_auth: AsyncClient):
         """
@@ -331,7 +335,9 @@ class TestExpenseUpdate:
             json={"amount": 40.0, "currency": "InvalidCurrency"},
         )
         assert response.status_code == 400
-        assert response.json()["detail"].startswith("Currency type is not added to user account")
+        assert response.json()["detail"].startswith(
+            "Currency type is not added to user account"
+        )
 
     async def test_category_404(self, async_client_auth: AsyncClient):
         # First, add an expense
@@ -353,7 +359,9 @@ class TestExpenseUpdate:
             json={"amount": 40.0, "category": "InvalidCategory"},
         )
         assert response.status_code == 400
-        assert response.json()["detail"].startswith("Category is not present in the user account")
+        assert response.json()["detail"].startswith(
+            "Category is not present in the user account"
+        )
 
     async def test_account_404(self, async_client_auth: AsyncClient):
         # First, add an expense
@@ -555,7 +563,9 @@ class TestExpenseDeleteAllWithMultipleScenarios:
         updated_balance = response.json()["account"]["balance"]
         assert updated_balance == initial_balance
 
-    async def test_single_expense_multiple_accounts(self, async_client_auth: AsyncClient):
+    async def test_single_expense_multiple_accounts(
+        self, async_client_auth: AsyncClient
+    ):
         # Create three accounts
         accounts = ["Wallet 7cd", "Credit 87a", "Cash as3"]
         balances = [300.0, 150.0, 50.0]
@@ -605,7 +615,9 @@ class TestExpenseDeleteAllWithMultipleScenarios:
             updated_balance = response.json()["account"]["balance"]
             assert updated_balance == balance
 
-    async def test_many_expenses_multiple_accounts(self, async_client_auth: AsyncClient):
+    async def test_many_expenses_multiple_accounts(
+        self, async_client_auth: AsyncClient
+    ):
         # Create multiple accounts with initial balances
         accounts = ["Account A", "Account B", "Account C"]
         balances = [500.0, 750.0, 1000.0]

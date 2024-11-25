@@ -1,9 +1,9 @@
+import time
 from unittest.mock import AsyncMock, patch
 
 import pytest
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext
-import time
 
 from bots.telegram.bot import (
     categories_command,
@@ -14,7 +14,6 @@ from bots.telegram.bot import (
     start_command,
     unified_callback_query_handler,
 )
-
 
 # # Fixture to mock Update and Context for testing
 # @pytest.fixture
