@@ -119,7 +119,7 @@ Here are the commands available in the `Makefile` to help you work with the proj
   ```bash
   make start_database
   ```
-  
+
 - **stop_database**: Stop the non-testing (live) database.
   ``` bash
   make stop_database

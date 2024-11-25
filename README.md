@@ -32,7 +32,6 @@
   <img src="docs/logo/logo.png" alt="Project Logo" width="300"/>
 </div>
 
-
 A REST API application for managing expenses. Build your own automation—be it a Telegram bot 🤖, Discord bot, or your own app 📱!
 
 🚨 Spoiler Alert! 🚨 We have built a Telegram bot as a proof of concept! 🤖🎉
@@ -40,9 +39,6 @@ A REST API application for managing expenses. Build your own automation—be it 
 <div align="center">
   <img src="http://ForTheBadge.com/images/badges/built-with-love.svg" alt="built_with_love"/>
 </div>
-
-
-
 
 ---
 
@@ -68,9 +64,7 @@ https://github.com/user-attachments/assets/91fdf9e0-9489-4e05-ab61-a7599e5463e1
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14027400.svg)](https://doi.org/10.5281/zenodo.14027400) 
 <!-- TODO: UPDATED DOI -->
 
-
 ### Stats
-
 ![pr_open](https://img.shields.io/github/issues-pr/Gunabana/MoneyManager?style=plastic&)
 ![pr_close](https://img.shields.io/github/issues-pr-closed/Gunabana/MoneyManager?style=plastic&)
 ![issue_open](https://img.shields.io/github/issues/Gunabana/MoneyManager.svg?style=plastic&)
@@ -83,7 +77,6 @@ https://github.com/user-attachments/assets/91fdf9e0-9489-4e05-ab61-a7599e5463e1
 ![downloads](https://img.shields.io/github/downloads/Gunabana/MoneyManager/total?style=plastic&)
 
 #### Tools & Technologies
-
 [![Python](https://img.shields.io/badge/python%203.12-3670A0?logo=python&logoColor=ffdd54)](https://www.python.org/downloads/release/python-3121/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-009485.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
@@ -96,7 +89,6 @@ https://github.com/user-attachments/assets/91fdf9e0-9489-4e05-ab61-a7599e5463e1
 ---
 
 ## Features
-
 - **Expense Tracking**: Add, update, and delete expenses. Track expenses by category, date, and account.
 - **Data Visualization**: View your expenses over time with customizable charts, including:
   - Monthly and weekly spending trends
@@ -193,7 +185,7 @@ To check code coverage locally:
 
 ## Configuration
 
-For **users**, no additional configuration is required—just start using MoneyManager! 
+For **users**, no additional configuration is required—just start using MoneyManager!
 
 For **contributors**, we’ve designed the system to be as modular as possible, so that updates to one module won’t impact others. However, there are a few configurable parameters available to help tailor and extend the system:
 
