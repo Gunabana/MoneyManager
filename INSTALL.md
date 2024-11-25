@@ -106,7 +106,7 @@ Here are the commands available in the `Makefile` to help you work with the proj
 - **install**: Install dependencies.
   ```bash
   make install
-  ``` 
+  ```
 
 -  **run**: Runs the application.
     ```bash

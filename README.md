@@ -61,7 +61,7 @@ https://github.com/user-attachments/assets/91fdf9e0-9489-4e05-ab61-a7599e5463e1
 ![black](https://img.shields.io/badge/code%20style-black-black?style=plastic&)
 ![license](https://img.shields.io/github/license/gitsetgopack/MoneyManager?style=plastic&)
 ![maintained](https://img.shields.io/badge/Maintained%3F-yes-green.svg?style=plastic&)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14027400.svg)](https://doi.org/10.5281/zenodo.14027400) 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14027400.svg)](https://doi.org/10.5281/zenodo.14027400)
 <!-- TODO: UPDATED DOI -->
 
 ### Stats
@@ -132,7 +132,7 @@ You'll need to create a Telegram bot through BotFather:
 2. Send the following command to BotFather:
 ```bash
 /newbot
-``` 
+```
 4. Follow the instructions to:
 - Choose a name for your bot.
 - Select a username ending with "bot" (required by Telegram).
