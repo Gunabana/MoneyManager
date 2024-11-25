@@ -2,7 +2,28 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Money Manager](#money-manager) is a tool designed to help you track and manage your finances effectively. With a range of features for visualizing expenses and monitoring account balances, it offers a clear view of your spending patterns and financial health.
+- [Money Manager](#money-manager)
+  - [Project Overview](#project-overview)
+    - [Quality](#quality)
+    - [Standards](#standards)
+    - [Stats](#stats)
+  - [Features](#features)
+  - [Usage](#usage)
+  - [Tech Stack](#tech-stack)
+  - [Tools](#tools)
+  - [Installation](#installation)
+    - [Webapp](#webapp)
+    - [Telegram: Preinstall](#telegram-preinstall)
+    - [Telegram: Installation](#telegram-installation)
+    - [Testing](#testing)
+    - [Code Coverage](#code-coverage)
+  - [Configuration](#configuration)
+  - [Troubleshooting](#troubleshooting)
+  - [🚀 Future Enhancements](#-future-enhancements)
+  - [Contributing](#contributing)
+  - [LICENSE](#license)
+  - [🤝 Contributors](#-contributors)
+  - [Code of Conduct](#code-of-conduct)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

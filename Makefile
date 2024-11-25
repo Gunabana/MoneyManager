@@ -17,7 +17,7 @@ start_database: ## make and run the database
 
 stop_database: ## stop the database
 	docker stop mongo-MM
-	
+
 clear_database: ## clear the database
 	docker stop mongo-MM
 	docker rm mongo-MM

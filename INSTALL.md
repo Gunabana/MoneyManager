@@ -8,7 +8,6 @@
   - [Available Make Commands](#available-make-commands)
   - [Additional Information](#additional-information)
   - [Troubleshooting](#troubleshooting)
-  - [Running the Project](#running-the-project)
   - [Running Tests](#running-tests)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
