@@ -25,7 +25,7 @@ clear_database: ## clear the database
 test: ## Start MongoDB Docker container, run tests, and clean up
 	docker run --name mongo-test -p 27017:27017 -d mongo:latest
 	@sleep 5  # Wait for MongoDB to be ready
-	pytest -v || (docker stop mongo-test && docker rm mongo-test && exit 1)
+	pytest --cov=api --cov-report=xml:coverage.xml --cov-report=term-missing -v || (docker stop mongo-test && docker rm mongo-test && exit 1)
 	docker stop mongo-test
 	docker rm mongo-test
 
