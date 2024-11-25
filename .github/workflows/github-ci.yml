@@ -6,7 +6,7 @@ on:  # yamllint disable-line rule:truthy
     branches:
       - release/*
       - bbond*
-      
+
   push:
     branches:
       - release/*
@@ -170,7 +170,6 @@ jobs:
           echo "TOTAL_TESTS_BADGE_URL=$TOTAL_TESTS_BADGE_URL" >> $GITHUB_ENV
           echo "CODE_COVERAGE_BADGE_URL=$CODE_COVERAGE_BADGE_URL" >> $GITHUB_ENV
           echo "PYTEST_STATUS_BADGE_URL=$PYTEST_STATUS_BADGE_URL" >> $GITHUB_ENV
-
 
       - name: Update README with all the badges
         run: |

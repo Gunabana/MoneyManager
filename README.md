@@ -226,4 +226,3 @@ Please note that we have a [Code of Conduct](CODE_OF_CONDUCT.md) that all contri
 ---
 
 Thank you for using MoneyManager! Follow this page to stay updated on new features and improvements.
-

@@ -49,9 +49,7 @@ PASSWORDS = {}
 
 
 def authenticate(func):
-    async def wrapper(
-        update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs
-    ):
+    async def wrapper(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
         # print("Checking auth")
         user_id = update.message.chat_id
         # print(user_id)
@@ -118,15 +116,11 @@ async def attempt_signup(update: Update, username: str, password: str):
 
         existing_user = await telegram_collection.find_one({"telegram_id": user_id})
         if existing_user:
-            await telegram_collection.update_one(
-                {"telegram_id": user_id}, {"$set": user_data}
-            )
+            await telegram_collection.update_one({"telegram_id": user_id}, {"$set": user_data})
         else:
             await telegram_collection.insert_one(user_data)
 
-        await update.message.reply_text(
-            "Signup successful! You can now log in using /login."
-        )
+        await update.message.reply_text("Signup successful! You can now log in using /login.")
         return
     await update.message.reply_text(
         f"An error occurred: {response.json().get('detail', 'Unknown error')}\nPlease try again by /singup or /login"
@@ -174,9 +168,7 @@ async def attempt_login(update: Update, username: str, password: str):
 
 
 @authenticate
-async def categories_command(
-    update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs
-):
+async def categories_command(update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs):
     """
     Show buttons for category actions (View, Add, Edit, Delete).
     """
@@ -188,9 +180,7 @@ async def categories_command(
         [InlineKeyboardButton("Delete Category", callback_data="delete_category")],
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text(
-        "Choose an action for categories:", reply_markup=reply_markup
-    )
+    await update.message.reply_text("Choose an action for categories:", reply_markup=reply_markup)
 
 
 @authenticate
@@ -253,18 +243,14 @@ async def edit_category_handler(query, context, **kwargs):
             for category in categories_data.keys()
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
-        await query.edit_message_text(
-            "Select a category to edit:", reply_markup=reply_markup
-        )
+        await query.edit_message_text("Select a category to edit:", reply_markup=reply_markup)
         context.user_data["category_action"] = "edit"
     else:
         error_message = response.json().get("detail", "Unable to fetch categories.")
         await query.edit_message_text(f"Error: {error_message}")
 
 
-async def handle_edit_category_selection(
-    update: Update, context: ContextTypes.DEFAULT_TYPE
-):
+async def handle_edit_category_selection(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
     Handle the selection of a category for editing and prompt for a new budget.
     """
@@ -278,9 +264,7 @@ async def handle_edit_category_selection(
     context.user_data["category_step"] = "edit_budget"  # Set the next expected step
 
     # Prompt the user to enter the new budget
-    await query.edit_message_text(
-        f"Enter the new monthly budget for {selected_category}:"
-    )
+    await query.edit_message_text(f"Enter the new monthly budget for {selected_category}:")
 
 
 @authenticate
@@ -300,9 +284,7 @@ async def delete_category_handler(query, context, **kwargs):
             for category in categories_data.keys()
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
-        await query.edit_message_text(
-            "Select a category to delete:", reply_markup=reply_markup
-        )
+        await query.edit_message_text("Select a category to delete:", reply_markup=reply_markup)
         context.user_data["category_action"] = "delete"
     else:
         error_message = response.json().get("detail", "Unable to fetch categories.")
@@ -322,9 +304,7 @@ async def handle_delete_category_selection(
 
     # Confirm deletion with the user
     headers = {"token": kwargs.get("token", None)}
-    response = requests.delete(
-        f"{API_BASE_URL}/categories/{selected_category}", headers=headers
-    )
+    response = requests.delete(f"{API_BASE_URL}/categories/{selected_category}", headers=headers)
 
     if response.status_code == 200:
         await query.edit_message_text(
@@ -341,9 +321,7 @@ async def delete_selected_category(query, context, selected_category, **kwargs):
     Delete the specified category and notify the user of the result.
     """
     headers = {"token": kwargs.get("token", None)}
-    response = requests.delete(
-        f"{API_BASE_URL}/categories/{selected_category}", headers=headers
-    )
+    response = requests.delete(f"{API_BASE_URL}/categories/{selected_category}", headers=headers)
 
     # Handle the response
     if response.status_code == 200:
@@ -356,9 +334,7 @@ async def delete_selected_category(query, context, selected_category, **kwargs):
 
 
 @authenticate
-async def finalize_category_addition(
-    update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs
-):
+async def finalize_category_addition(update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs):
     """
     Finalize adding a new category by making an API request and confirm to the user.
     """
@@ -377,15 +353,11 @@ async def finalize_category_addition(
     print("Sending request to add category")
     print(f"Headers: {headers}")
     print(f"Payload: {payload}")
-    print(
-        f"API Endpoint: https://frightening-orb-747j6q4gjjqcwr7j-9999.app.github.dev/categories/"
-    )
+    print(f"API Endpoint: https://frightening-orb-747j6q4gjjqcwr7j-9999.app.github.dev/categories/")
 
     try:
         # Send the request to add the category
-        response = requests.post(
-            f"{API_BASE_URL}/categories/", json=payload, headers=headers
-        )
+        response = requests.post(f"{API_BASE_URL}/categories/", json=payload, headers=headers)
 
         # Log response details
         print(f"Response status code: {response.status_code}")
@@ -399,9 +371,7 @@ async def finalize_category_addition(
             error_message = response.json().get(
                 "detail", "An error occurred while adding the category."
             )
-            await update.message.reply_text(
-                f"Failed to add category. Error: {error_message}"
-            )
+            await update.message.reply_text(f"Failed to add category. Error: {error_message}")
 
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -446,9 +416,7 @@ async def add_command(update: Update, context: ContextTypes.DEFAULT_TYPE, **kwar
         await update.message.reply_text("Expense added successfully!")
     else:
         error_message = response.json().get("detail", "Unknown error")
-        await update.message.reply_text(
-            f"Failed to add expense. Error: {error_message}"
-        )
+        await update.message.reply_text(f"Failed to add expense. Error: {error_message}")
 
 
 async def view_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -466,9 +434,7 @@ async def expense_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [InlineKeyboardButton("Delete Expense", callback_data="delete_expense")],
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text(
-        "Choose an expense action:", reply_markup=reply_markup
-    )
+    await update.message.reply_text("Choose an expense action:", reply_markup=reply_markup)
 
 
 @authenticate
@@ -524,9 +490,7 @@ async def update_expense_handler(query, context, **kwargs):
             for exp in expenses_data
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
-        await query.edit_message_text(
-            "Select an expense to update:", reply_markup=reply_markup
-        )
+        await query.edit_message_text("Select an expense to update:", reply_markup=reply_markup)
     else:
         await query.edit_message_text("Error fetching expenses for update.")
 
@@ -553,16 +517,12 @@ async def delete_expense_handler(query, context, **kwargs):
             for exp in expenses_data
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
-        await query.edit_message_text(
-            "Select an expense to delete:", reply_markup=reply_markup
-        )
+        await query.edit_message_text("Select an expense to delete:", reply_markup=reply_markup)
     else:
         await query.edit_message_text("Error fetching expenses for deletion.")
 
 
-async def handle_expense_update_selection(
-    update: Update, context: ContextTypes.DEFAULT_TYPE
-):
+async def handle_expense_update_selection(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
     Handle selection of an expense for updating and prompt for new amount.
     """
@@ -576,9 +536,7 @@ async def handle_expense_update_selection(
     await query.edit_message_text("Please enter the new amount for this expense:")
 
 
-async def handle_expense_delete_selection(
-    update: Update, context: ContextTypes.DEFAULT_TYPE
-):
+async def handle_expense_delete_selection(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
     Handle the confirmation and deletion of a selected expense.
     """
@@ -596,9 +554,7 @@ async def handle_expense_delete_selection(
 
 
 @authenticate
-async def finalize_expense_update(
-    update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs
-):
+async def finalize_expense_update(update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs):
     """
     Finalize updating an expense by applying the new amount and category.
     """
@@ -607,9 +563,7 @@ async def finalize_expense_update(
     headers = {"token": kwargs.get("token", None)}
     payload = {"amount": new_amount}
 
-    response = requests.put(
-        f"{API_BASE_URL}/expenses/{expense_id}", json=payload, headers=headers
-    )
+    response = requests.put(f"{API_BASE_URL}/expenses/{expense_id}", json=payload, headers=headers)
 
     if response.status_code == 200:
         await update.message.reply_text("Expense updated successfully!")
@@ -623,9 +577,7 @@ async def finalize_expense_update(
 
 
 @authenticate
-async def finalize_expense(
-    update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs
-):
+async def finalize_expense(update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs):
     """
     Finalize the expense entry by sending it to the API and notifying the user of success.
     """
@@ -648,12 +600,8 @@ async def finalize_expense(
             f"Expense added successfully!\n\nAmount: {amount}\nCategory: {category}\nDate: {date}"
         )
     else:
-        error_message = response.json().get(
-            "detail", "An error occurred while adding the expense."
-        )
-        await update.message.reply_text(
-            f"Failed to add expense. Error: {error_message}"
-        )
+        error_message = response.json().get("detail", "An error occurred while adding the expense.")
+        await update.message.reply_text(f"Failed to add expense. Error: {error_message}")
 
     # Clear context data related to the expense entry
     context.user_data.pop("expense_action", None)
@@ -743,9 +691,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @authenticate
-async def combined_message_handler(
-    update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs
-):
+async def combined_message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs):
     """
     Combined handler for handling category and expense inputs step-by-step.
     """
@@ -760,13 +706,9 @@ async def combined_message_handler(
                 amount = float(text)
                 context.user_data["amount"] = amount
                 context.user_data["expense_step"] = "category"
-                await update.message.reply_text(
-                    "Please enter the category (e.g., Food):"
-                )
+                await update.message.reply_text("Please enter the category (e.g., Food):")
             except ValueError:
-                await update.message.reply_text(
-                    "Invalid amount. Please enter a numeric value."
-                )
+                await update.message.reply_text("Invalid amount. Please enter a numeric value.")
             return
 
         elif context.user_data.get("expense_step") == "category":
@@ -794,9 +736,7 @@ async def combined_message_handler(
                 context.user_data["new_amount"] = new_amount
                 await finalize_expense_update(update, context)
             except ValueError:
-                await update.message.reply_text(
-                    "Invalid amount. Please enter a numeric value."
-                )
+                await update.message.reply_text("Invalid amount. Please enter a numeric value.")
             return
 
     # Check if the user is in the process of adding a new category
@@ -804,9 +744,7 @@ async def combined_message_handler(
         if context.user_data.get("category_step") == "add_name":
             context.user_data["new_category_name"] = text
             context.user_data["category_step"] = "add_budget"
-            await update.message.reply_text(
-                "Please enter the monthly budget for this category:"
-            )
+            await update.message.reply_text("Please enter the monthly budget for this category:")
             return
 
         elif context.user_data.get("category_step") == "add_budget":
@@ -815,9 +753,7 @@ async def combined_message_handler(
                 context.user_data["new_category_budget"] = monthly_budget
                 await finalize_category_addition(update, context)
             except ValueError:
-                await update.message.reply_text(
-                    "Invalid budget. Please enter a numeric value."
-                )
+                await update.message.reply_text("Invalid budget. Please enter a numeric value.")
             return
 
     # Check if the user is in the process of editing a category's budget
@@ -841,15 +777,11 @@ async def combined_message_handler(
                         f"The budget for {selected_category} has been updated to {new_budget}."
                     )
                 else:
-                    error_message = response.json().get(
-                        "detail", "Failed to update category."
-                    )
+                    error_message = response.json().get("detail", "Failed to update category.")
                     await update.message.reply_text(f"Error: {error_message}")
 
             except ValueError:
-                await update.message.reply_text(
-                    "Invalid budget. Please enter a numeric value."
-                )
+                await update.message.reply_text("Invalid budget. Please enter a numeric value.")
 
             # Clear context data after updating
             context.user_data.pop("category_action", None)
@@ -890,9 +822,7 @@ async def combined_message_handler(
         await handle_general_message(update, context)
 
 
-async def unified_callback_query_handler(
-    update: Update, context: ContextTypes.DEFAULT_TYPE
-):
+async def unified_callback_query_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
     Unified handler for all callback queries related to categories and expenses.
     """
@@ -914,9 +844,7 @@ async def unified_callback_query_handler(
         context.user_data["selected_category"] = selected_category
         context.user_data["category_action"] = "edit"
         context.user_data["category_step"] = "edit_budget"
-        await query.edit_message_text(
-            f"Enter the new monthly budget for {selected_category}:"
-        )
+        await query.edit_message_text(f"Enter the new monthly budget for {selected_category}:")
     elif data.startswith("delete_"):
 
         selected_category = data.replace("delete_", "")
@@ -989,9 +917,7 @@ if __name__ == "__main__":
     app.add_handler(CallbackQueryHandler(unified_callback_query_handler))
 
     app.add_handler(
-        MessageHandler(
-            filters.TEXT & filters.ChatType.PRIVATE, combined_message_handler
-        )
+        MessageHandler(filters.TEXT & filters.ChatType.PRIVATE, combined_message_handler)
     )
     app.add_handler(MessageHandler(filters.COMMAND, fallback_command))
     app.add_error_handler(error)
