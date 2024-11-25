@@ -219,9 +219,7 @@ async def update_user(user_update: UserUpdate, token: str = Header(None)):
         update_fields["password"] = update_fields["password"]
 
     if "currencies" in update_fields and isinstance(update_fields["currencies"], list):
-        new_currencies = list(
-            set(user.get("currencies", []) + update_fields["currencies"])
-        )
+        new_currencies = list(set(user.get("currencies", []) + update_fields["currencies"]))
         update_fields["currencies"] = new_currencies
     try:
         result = await users_collection.update_one(
@@ -319,9 +317,7 @@ async def get_token(token_id: str, token: str = Header(None)) -> dict:
         dict: Details of the specified token.
     """
     user_id = await verify_token(token)
-    token_data = await tokens_collection.find_one(
-        {"user_id": user_id, "_id": ObjectId(token_id)}
-    )
+    token_data = await tokens_collection.find_one({"user_id": user_id, "_id": ObjectId(token_id)})
     if not token_data:
         raise HTTPException(status_code=404, detail="Token not found")
 
@@ -377,9 +373,7 @@ async def delete_token(token_id: str, token: str = Header(None)):
         dict: Message indicating whether the token was successfully deleted.
     """
     user_id = await verify_token(token)
-    result = await tokens_collection.delete_one(
-        {"user_id": user_id, "_id": ObjectId(token_id)}
-    )
+    result = await tokens_collection.delete_one({"user_id": user_id, "_id": ObjectId(token_id)})
 
     if result.deleted_count == 1:
         return {"message": "Token deleted successfully"}
