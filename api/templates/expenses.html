@@ -42,6 +42,7 @@
             <button id="edit-expense-btn" class="edit-btn">Edit</button>
             <button id="new-expense-btn" class="new-btn">New</button>
         </h2>
+        <button id="download-excel-btn" class="download-btn">Download Excel</button>
 
         <ul id="expenses" class="expense-list"></ul>
         <div id="expense-form" class="form-container">
@@ -60,6 +61,41 @@
 
     <script>
         let isEditing = false;
+
+        document.getElementById('download-excel-btn').addEventListener('click', async () => {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                alert('You need to log in first.');
+                window.location.href = '/login';
+                return;
+            }
+
+            try {
+                const response = await fetch('/expenses/export/excel', {
+                    method: 'GET',
+                    headers: {
+                        'token': token
+                    }
+                });
+
+                if (response.ok) {
+                    // Create a Blob from the response
+                    const blob = await response.blob();
+
+                    // Create a download link
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = window.URL.createObjectURL(blob);
+                    downloadLink.download = 'expenses.xlsx';
+                    downloadLink.click();
+                } else {
+                    const error = await response.json();
+                    alert(error.detail || 'Failed to download Excel file.');
+                }
+            } catch (error) {
+                alert('An error occurred. Please try again later.');
+            }
+        });
+
 
         async function fetchAndDisplayExpenses() {
             const token = localStorage.getItem('access_token');

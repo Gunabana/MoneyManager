@@ -14,6 +14,10 @@ from pydantic import BaseModel
 from api.utils.auth import verify_token
 from config import MONGO_URI
 
+import io
+import pandas as pd
+from fastapi.responses import StreamingResponse
+
 currency_converter = CurrencyConverter()
 
 router = APIRouter(prefix="/expenses", tags=["Expenses"])
@@ -392,3 +396,38 @@ async def update_expense(
             "balance": new_balance,
         }
     raise HTTPException(status_code=500, detail="Failed to update expense")
+
+
+@router.get("/export/excel")
+async def export_expenses_to_excel(token: str = Header(None)):
+    """
+    Export user expenses to an Excel file.
+    Args:
+        token (str): Authentication token.
+    Returns:
+        StreamingResponse: Excel file download response.
+    """
+    user_id = await verify_token(token)
+    expenses = await expenses_collection.find({"user_id": user_id}).to_list(None)
+
+    if not expenses:
+        raise HTTPException(status_code=404, detail="No expenses found.")
+
+    # Convert MongoDB documents to DataFrame
+    print(expenses)
+    for expense in expenses:
+        expense["_id"] = str(expense["_id"])
+    df = pd.DataFrame(expenses)
+
+    # Create an in-memory file
+    output = io.BytesIO()
+    with pd.ExcelWriter(output, engine="openpyxl") as writer:
+        df.to_excel(writer, index=False, sheet_name="Expenses")
+    output.seek(0)
+
+    return StreamingResponse(
+        output,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": "attachment; filename=expenses.xlsx"},
+    )
+
