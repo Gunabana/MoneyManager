@@ -25,7 +25,9 @@ class TestConvertCurrency:
     def test_same_currency(self):
         amount = 100
         result = api.routers.expenses.convert_currency(100, "USD", "USD")
-        assert result == amount, "Conversion should return the original amount if currencies are the same"
+        assert (
+            result == amount
+        ), "Conversion should return the original amount if currencies are the same"
 
     # Test case for successful conversion
     @patch("api.routers.expenses.currency_converter.convert")
@@ -100,7 +102,9 @@ class TestExpenseAdd:
             json={"amount": 50.0, "currency": "USD", "category": "InvalidCategory"},
         )
         assert response.status_code == 400
-        assert response.json()["detail"].startswith("Category is not present in the user account")
+        assert response.json()["detail"].startswith(
+            "Category is not present in the user account"
+        )
 
     async def test_invalid_account(self, async_client_auth: AsyncClient):
         response = await async_client_auth.post(
@@ -153,8 +157,12 @@ class TestExpenseAdd:
         )
         assert response.status_code == 200, response.json()
         expense_date = response.json()["expense"]["date"]
-        assert datetime.datetime.fromisoformat(expense_date), "The date should be a valid ISO datetime"
-        assert expense_date == valid_date, "The date should match the user-provided date"
+        assert datetime.datetime.fromisoformat(
+            expense_date
+        ), "The date should be a valid ISO datetime"
+        assert (
+            expense_date == valid_date
+        ), "The date should match the user-provided date"
 
     async def test_invalid_date(self, async_client_auth: AsyncClient):
         """
@@ -327,7 +335,9 @@ class TestExpenseUpdate:
             json={"amount": 40.0, "currency": "InvalidCurrency"},
         )
         assert response.status_code == 400
-        assert response.json()["detail"].startswith("Currency type is not added to user account")
+        assert response.json()["detail"].startswith(
+            "Currency type is not added to user account"
+        )
 
     async def test_category_404(self, async_client_auth: AsyncClient):
         # First, add an expense
@@ -349,7 +359,9 @@ class TestExpenseUpdate:
             json={"amount": 40.0, "category": "InvalidCategory"},
         )
         assert response.status_code == 400
-        assert response.json()["detail"].startswith("Category is not present in the user account")
+        assert response.json()["detail"].startswith(
+            "Category is not present in the user account"
+        )
 
     async def test_account_404(self, async_client_auth: AsyncClient):
         # First, add an expense
@@ -399,7 +411,9 @@ class TestExpenseUpdate:
         assert response.json()["detail"] == "Insufficient balance to update the expense"
 
     async def test_not_found(self, async_client_auth: AsyncClient):
-        response = await async_client_auth.put("/expenses/507f1f77bcf86cd799439011", json={"amount": 100.0})
+        response = await async_client_auth.put(
+            "/expenses/507f1f77bcf86cd799439011", json={"amount": 100.0}
+        )
         assert response.status_code == 404, response.json()
         assert response.json()["detail"] == "Expense not found"
 
@@ -549,7 +563,9 @@ class TestExpenseDeleteAllWithMultipleScenarios:
         updated_balance = response.json()["account"]["balance"]
         assert updated_balance == initial_balance
 
-    async def test_single_expense_multiple_accounts(self, async_client_auth: AsyncClient):
+    async def test_single_expense_multiple_accounts(
+        self, async_client_auth: AsyncClient
+    ):
         # Create three accounts
         accounts = ["Wallet 7cd", "Credit 87a", "Cash as3"]
         balances = [300.0, 150.0, 50.0]
@@ -599,7 +615,9 @@ class TestExpenseDeleteAllWithMultipleScenarios:
             updated_balance = response.json()["account"]["balance"]
             assert updated_balance == balance
 
-    async def test_many_expenses_multiple_accounts(self, async_client_auth: AsyncClient):
+    async def test_many_expenses_multiple_accounts(
+        self, async_client_auth: AsyncClient
+    ):
         # Create multiple accounts with initial balances
         accounts = ["Account A", "Account B", "Account C"]
         balances = [500.0, 750.0, 1000.0]
@@ -685,7 +703,9 @@ async def test_currency_conversion(async_client_auth: AsyncClient):
 
     expense_id = response.json()["expense"]["_id"]
     # update
-    response = await async_client_auth.put(f"/expenses/{expense_id}", json={"amount": 50, "currency": "USD"})
+    response = await async_client_auth.put(
+        f"/expenses/{expense_id}", json={"amount": 50, "currency": "USD"}
+    )
     assert response.status_code == 200
     # delete
     response = await async_client_auth.delete(f"/expenses/{expense_id}")

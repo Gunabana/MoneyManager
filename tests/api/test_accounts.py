@@ -43,7 +43,9 @@ class TestAccountCreation:
         response = await async_client_auth.post("/accounts/", json={"balance": 1000.0})
         assert response.status_code == 422  # Unprocessable Entity
 
-    async def test_create_account_with_invalid_data(self, async_client_auth: AsyncClient):
+    async def test_create_account_with_invalid_data(
+        self, async_client_auth: AsyncClient
+    ):
         """
         Test creating an account with invalid data types for fields.
         """
@@ -193,7 +195,9 @@ class TestAccountNameConstraints:
 
 @pytest.mark.anyio
 class TestAccountCurrencyValidation:
-    async def test_create_account_with_invalid_currency(self, async_client_auth: AsyncClient):
+    async def test_create_account_with_invalid_currency(
+        self, async_client_auth: AsyncClient
+    ):
         """
         Test creating an account with an unsupported currency code.
         """

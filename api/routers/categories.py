@@ -58,13 +58,17 @@ async def create_category(category: CategoryCreate, token: str = Header(None)):
 
     user["categories"][category.name] = {"monthly_budget": category.monthly_budget}
 
-    await users_collection.update_one({"_id": ObjectId(user_id)}, {"$set": {"categories": user["categories"]}})
+    await users_collection.update_one(
+        {"_id": ObjectId(user_id)}, {"$set": {"categories": user["categories"]}}
+    )
 
     return {"message": "Category created successfully"}
 
 
 @router.put("/{category_name}")
-async def update_category(category_name: str, category_update: CategoryUpdate, token: str = Header(None)):
+async def update_category(
+    category_name: str, category_update: CategoryUpdate, token: str = Header(None)
+):
     """
     Update an existing category's monthly budget.
 
@@ -87,7 +91,9 @@ async def update_category(category_name: str, category_update: CategoryUpdate, t
 
     user["categories"][category_name]["monthly_budget"] = category_update.monthly_budget
 
-    await users_collection.update_one({"_id": ObjectId(user_id)}, {"$set": {"categories": user["categories"]}})
+    await users_collection.update_one(
+        {"_id": ObjectId(user_id)}, {"$set": {"categories": user["categories"]}}
+    )
 
     return {"message": "Category updated successfully"}
 
@@ -153,6 +159,8 @@ async def delete_category(category_name: str, token: str = Header(None)):
 
     del user["categories"][category_name]
 
-    await users_collection.update_one({"_id": ObjectId(user_id)}, {"$set": {"categories": user["categories"]}})
+    await users_collection.update_one(
+        {"_id": ObjectId(user_id)}, {"$set": {"categories": user["categories"]}}
+    )
 
     return {"message": "Category deleted successfully"}
