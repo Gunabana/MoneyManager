@@ -1,4 +1,4 @@
-.delete-btn, .update-btn {
+.delete-btn, .update-btn, .download-btn {
     margin-left: 10px;
     cursor: pointer;
     float: right;
@@ -6,6 +6,9 @@
 
 .delete-btn {
     color: red;
+}
+.download-btn {
+    color: blue; /* Optional: Different color to distinguish the button */
 }
 
 .edit-btn, .new-btn {

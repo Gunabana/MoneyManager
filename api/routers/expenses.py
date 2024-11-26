@@ -399,14 +399,8 @@ async def update_expense(
 
 
 @router.get("/export/excel")
+@router.get("/export/excel")
 async def export_expenses_to_excel(token: str = Header(None)):
-    """
-    Export user expenses to an Excel file.
-    Args:
-        token (str): Authentication token.
-    Returns:
-        StreamingResponse: Excel file download response.
-    """
     user_id = await verify_token(token)
     expenses = await expenses_collection.find({"user_id": user_id}).to_list(None)
 
@@ -414,15 +408,39 @@ async def export_expenses_to_excel(token: str = Header(None)):
         raise HTTPException(status_code=404, detail="No expenses found.")
 
     # Convert MongoDB documents to DataFrame
-    print(expenses)
     for expense in expenses:
-        expense["_id"] = str(expense["_id"])
+        expense["_id"] = str(expense["_id"])  # Convert ObjectId to string for compatibility
+
     df = pd.DataFrame(expenses)
+
+    # Drop '_id' and 'user_id' columns
+    df.drop(columns=["_id", "user_id"], inplace=True, errors="ignore")
+
+    # Move 'description' column to the first position
+    if "description" in df.columns:
+        description_column = df.pop("description")  # Remove and get 'description' column
+        df.insert(0, "description", description_column)  # Insert it at the first position
 
     # Create an in-memory file
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine="openpyxl") as writer:
         df.to_excel(writer, index=False, sheet_name="Expenses")
+        workbook = writer.book
+        sheet = writer.sheets["Expenses"]
+
+        # Auto-adjust column width
+        for column_cells in sheet.columns:
+            max_length = 0
+            column_letter = column_cells[0].column_letter  # Get column letter
+            for cell in column_cells:
+                try:
+                    if cell.value:
+                        max_length = max(max_length, len(str(cell.value)))
+                except:
+                    pass
+            adjusted_width = max_length + 2  # Add some padding
+            sheet.column_dimensions[column_letter].width = adjusted_width
+
     output.seek(0)
 
     return StreamingResponse(
