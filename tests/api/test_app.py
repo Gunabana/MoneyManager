@@ -14,7 +14,7 @@ class TestRoutes:
     async def test_signup_page(self, async_client: AsyncClient):
         response = await async_client.get("/signup")
         assert response.status_code == 200
-        
+
     async def test_login_page(self, async_client: AsyncClient):
         response = await async_client.get("/login")
         assert response.status_code == 200

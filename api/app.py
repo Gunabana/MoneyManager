@@ -23,6 +23,7 @@ async def lifespan(_app: FastAPI):
     # Handles the shutdown event to close the MongoDB client
     await users.shutdown_db_client()
 
+
 app = FastAPI(lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="api/static"), name="static")
 app.mount("/logo", StaticFiles(directory="docs/logo"), name="logo")
