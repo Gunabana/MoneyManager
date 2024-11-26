@@ -90,7 +90,8 @@ async def landing_page(request: Request, token: Optional[str] = Header(None)):
 
 
 @app.get("/categories", response_class=HTMLResponse)
-async def landing_page(request: Request, token: Optional[str] = Header(None)):
+async def category(request: Request, token: Optional[str] = Header(None)):
+    """gets categories"""
     token = request.cookies.get("access_token")  # retrieve token from cookies
     if not token:
         return RedirectResponse(url="/login", status_code=302)
@@ -105,7 +106,8 @@ async def landing_page(request: Request, token: Optional[str] = Header(None)):
 
 
 @app.get("/expenses", response_class=HTMLResponse)
-async def landing_page(request: Request, token: Optional[str] = Header(None)):
+async def expense(request: Request, token: Optional[str] = Header(None)):
+    """gets current expenses"""
     token = request.cookies.get("access_token")  # retrieve token from cookies
     if not token:
         return RedirectResponse(url="/login", status_code=302)
@@ -120,7 +122,8 @@ async def landing_page(request: Request, token: Optional[str] = Header(None)):
 
 
 @app.get("/barchart", response_class=HTMLResponse)
-async def landing_page(request: Request, token: Optional[str] = Header(None)):
+async def barchart(request: Request, token: Optional[str] = Header(None)):
+    """loads the bar chart"""
     token = request.cookies.get("access_token")  # retrieve token from cookies
     if not token:
         return RedirectResponse(url="/login", status_code=302)
@@ -135,7 +138,8 @@ async def landing_page(request: Request, token: Optional[str] = Header(None)):
 
 
 @app.get("/piechart", response_class=HTMLResponse)
-async def landing_page(request: Request, token: Optional[str] = Header(None)):
+async def piechart(request: Request, token: Optional[str] = Header(None)):
+    """loads the pie chart"""
     token = request.cookies.get("access_token")  # retrieve token from cookies
     if not token:
         return RedirectResponse(url="/login", status_code=302)
@@ -151,6 +155,7 @@ async def landing_page(request: Request, token: Optional[str] = Header(None)):
 
 @app.get("/docs/logo/MoneyManagerLOGO.png")
 async def get_image():
+    """loads the site logo"""
     image_path = Path("/docs/logo/MoneyManagerLOGO.png")
     if not image_path.is_file():
         return {"error": "image not found"}
