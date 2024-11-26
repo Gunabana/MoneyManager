@@ -3,6 +3,7 @@ This module contains configuration settings for the Money Manager application.
 """
 
 import os
+
 from dotenv import load_dotenv
 
 load_dotenv()

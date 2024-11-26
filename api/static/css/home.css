@@ -33,9 +33,7 @@ a:hover {
 }
 nav {
     background-color: #333;
-    
     overflow: hidden;
-    
 }
 
 nav a{
@@ -67,7 +65,7 @@ nav a.split {
     float: left;
     overflow: hidden;
   }
-  
+
   .dropdown .dropbtn {
     font-size: 16px;  
     border: none;
@@ -86,7 +84,7 @@ nav a.split {
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
   }
-  
+
   .dropdown-content a {
     float: none;
     color: black;
@@ -95,11 +93,11 @@ nav a.split {
     display: block;
     text-align: left;
   }
-  
+
   .dropdown-content a:hover {
     background-color: #ddd;
   }
-  
+
   .dropdown:hover .dropdown-content {
     display: block;
   }
@@ -110,6 +108,7 @@ nav a.split {
     padding: 10px;
     font-size: 16px;
 }
+
 .form-container input {
     display: block;
     width: 97%;
