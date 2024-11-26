@@ -39,9 +39,7 @@ def convert_currency(amount, from_cur, to_cur):
     try:
         return currency_converter.convert(amount, from_cur, to_cur)
     except Exception as e:
-        raise HTTPException(
-            status_code=400, detail=f"Currency conversion failed: {str(e)}"
-        ) from e
+        raise HTTPException(status_code=400, detail=f"Currency conversion failed: {str(e)}") from e
 
 
 class ExpenseCreate(BaseModel):
@@ -79,9 +77,7 @@ async def add_expense(expense: ExpenseCreate, token: str = Header(None)):
         dict: Message with expense details and updated balance.
     """
     user_id = await verify_token(token)
-    account = await accounts_collection.find_one(
-        {"user_id": user_id, "name": expense.account_name}
-    )
+    account = await accounts_collection.find_one({"user_id": user_id, "name": expense.account_name})
     if not account:
         raise HTTPException(status_code=400, detail="Invalid account type")
 
@@ -93,14 +89,9 @@ async def add_expense(expense: ExpenseCreate, token: str = Header(None)):
     if expense.currency not in user["currencies"]:
         raise HTTPException(
             status_code=400,
-            detail=(
-                f"Currency type is not added to user account. "
-                f"Available currencies are {user['currencies']}"
-            ),
+            detail=(f"Currency type is not added to user account. " f"Available currencies are {user['currencies']}"),
         )
-    converted_amount = convert_currency(
-        expense.amount, expense.currency, account["currency"]
-    )
+    converted_amount = convert_currency(expense.amount, expense.currency, account["currency"])
 
     if account["balance"] < converted_amount:
         raise HTTPException(
@@ -112,16 +103,13 @@ async def add_expense(expense: ExpenseCreate, token: str = Header(None)):
         raise HTTPException(
             status_code=400,
             detail=(
-                f"Category is not present in the user account. "
-                f"Available categories are {list(user['categories'])}"
+                f"Category is not present in the user account. " f"Available categories are {list(user['categories'])}"
             ),
         )
 
     # Deduct amount from user's account balance
     new_balance = account["balance"] - converted_amount
-    await accounts_collection.update_one(
-        {"_id": account["_id"]}, {"$set": {"balance": new_balance}}
-    )
+    await accounts_collection.update_one({"_id": account["_id"]}, {"$set": {"balance": new_balance}})
 
     # Convert date to datetime object or use current datetime if none is provided
     expense_date = expense.date or datetime.datetime.now(datetime.timezone.utc)
@@ -175,9 +163,7 @@ async def get_expense(expense_id: str, token: str = Header(None)):
         dict: Details of the specified expense.
     """
     user_id = await verify_token(token)
-    expense = await expenses_collection.find_one(
-        {"user_id": user_id, "_id": ObjectId(expense_id)}
-    )
+    expense = await expenses_collection.find_one({"user_id": user_id, "_id": ObjectId(expense_id)})
     if not expense:
         raise HTTPException(status_code=404, detail="Expense not found")
     return format_id(expense)
@@ -208,9 +194,7 @@ async def delete_all_expenses(token: str = Header(None)):
         amount = expense.get("amount", 0)
 
         # Find the account ID by name
-        account = await accounts_collection.find_one(
-            {"name": account_name, "user_id": user_id}
-        )
+        account = await accounts_collection.find_one({"name": account_name, "user_id": user_id})
         if account:
             account_id = account["_id"]
             if account_id in account_adjustments:
@@ -250,21 +234,15 @@ async def delete_expense(expense_id: str, token: str = Header(None)):
         raise HTTPException(status_code=404, detail="Expense not found")
 
     account_name = expense["account_name"]
-    account = await accounts_collection.find_one(
-        {"user_id": user_id, "name": account_name}
-    )
+    account = await accounts_collection.find_one({"user_id": user_id, "name": account_name})
     if not account:
         raise HTTPException(status_code=404, detail="Account not found")
 
-    amount = convert_currency(
-        expense["amount"], expense["currency"], account["currency"]
-    )
+    amount = convert_currency(expense["amount"], expense["currency"], account["currency"])
 
     # Refund the amount to user's account
     new_balance = account["balance"] + amount
-    await accounts_collection.update_one(
-        {"_id": account["_id"]}, {"$set": {"balance": new_balance}}
-    )
+    await accounts_collection.update_one({"_id": account["_id"]}, {"$set": {"balance": new_balance}})
 
     # Delete the expense
     result = await expenses_collection.delete_one({"_id": ObjectId(expense_id)})
@@ -276,9 +254,7 @@ async def delete_expense(expense_id: str, token: str = Header(None)):
 
 @router.put("/{expense_id}")
 # pylint: disable=too-many-locals
-async def update_expense(
-    expense_id: str, expense_update: ExpenseUpdate, token: str = Header(None)
-):
+async def update_expense(expense_id: str, expense_update: ExpenseUpdate, token: str = Header(None)):
     """
     Update an expense by ID.
 
@@ -308,8 +284,7 @@ async def update_expense(
                 raise HTTPException(
                     status_code=400,
                     detail=(
-                        f"Currency type is not added to user account. "
-                        f"Available currencies are {user['currencies']}"
+                        f"Currency type is not added to user account. " f"Available currencies are {user['currencies']}"
                     ),
                 )
             update_fields["currency"] = expense_update.currency
@@ -321,9 +296,7 @@ async def update_expense(
 
             # Adjust the user's balance
             # Convert old and new amounts to the account currency to determine balance adjustment
-            original_amount_converted = convert_currency(
-                expense["amount"], expense["currency"], account["currency"]
-            )
+            original_amount_converted = convert_currency(expense["amount"], expense["currency"], account["currency"])
             new_amount_converted = convert_currency(
                 expense_update.amount,
                 expense_update.currency or expense["currency"],
@@ -334,12 +307,8 @@ async def update_expense(
             new_balance = account["balance"] - difference
 
             if new_balance < 0:
-                raise HTTPException(
-                    status_code=400, detail="Insufficient balance to update the expense"
-                )
-            await accounts_collection.update_one(
-                {"_id": account["_id"]}, {"$set": {"balance": new_balance}}
-            )
+                raise HTTPException(status_code=400, detail="Insufficient balance to update the expense")
+            await accounts_collection.update_one({"_id": account["_id"]}, {"$set": {"balance": new_balance}})
 
     def validate_category():
         if expense_update.category:
@@ -364,9 +333,7 @@ async def update_expense(
     # Run validations
     validate_currency()
     account_name = expense["account_name"]
-    account = await accounts_collection.find_one(
-        {"user_id": user_id, "name": account_name}
-    )
+    account = await accounts_collection.find_one({"user_id": user_id, "name": account_name})
     if not account:
         raise HTTPException(status_code=404, detail="Account not found")
 
@@ -379,13 +346,9 @@ async def update_expense(
     if not update_fields:
         raise HTTPException(status_code=400, detail="No fields to update")
 
-    result = await expenses_collection.update_one(
-        {"_id": ObjectId(expense_id)}, {"$set": update_fields}
-    )
+    result = await expenses_collection.update_one({"_id": ObjectId(expense_id)}, {"$set": update_fields})
     if result.modified_count == 1:
-        updated_expense = await expenses_collection.find_one(
-            {"_id": ObjectId(expense_id)}
-        )
+        updated_expense = await expenses_collection.find_one({"_id": ObjectId(expense_id)})
         return {
             "message": "Expense updated successfully",
             "updated_expense": format_id(updated_expense),

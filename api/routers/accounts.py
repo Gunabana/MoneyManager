@@ -50,9 +50,7 @@ async def create_account(account: AccountCreate, token: str = Header(None)):
         dict: A message confirming the account creation.
     """
     user_id = await verify_token(token)
-    existing_account = await accounts_collection.find_one(
-        {"user_id": user_id, "name": account.name}
-    )
+    existing_account = await accounts_collection.find_one({"user_id": user_id, "name": account.name})
 
     if existing_account:
         raise HTTPException(status_code=400, detail="Account type already exists")
@@ -91,9 +89,7 @@ async def get_accounts(token: str = Header(None)):
         raise HTTPException(status_code=404, detail="No accounts found for the user")
 
     # Convert ObjectId to string for better readability
-    formatted_accounts = [
-        {**account, "_id": str(account["_id"])} for account in accounts
-    ]
+    formatted_accounts = [{**account, "_id": str(account["_id"])} for account in accounts]
     return {"accounts": formatted_accounts}
 
 
@@ -110,23 +106,17 @@ async def get_account(account_id: str, token: str = Header(None)):
         dict: The account details.
     """
     user_id = await verify_token(token)
-    account = await accounts_collection.find_one(
-        {"_id": ObjectId(account_id), "user_id": user_id}
-    )
+    account = await accounts_collection.find_one({"_id": ObjectId(account_id), "user_id": user_id})
 
     if not account:
         raise HTTPException(status_code=404, detail="Account not found")
 
-    account["_id"] = str(
-        account["_id"]
-    )  # Convert ObjectId to string for better readability
+    account["_id"] = str(account["_id"])  # Convert ObjectId to string for better readability
     return {"account": account}
 
 
 @router.put("/{account_id}")
-async def update_account(
-    account_id: str, account_update: AccountUpdate, token: str = Header(None)
-):
+async def update_account(account_id: str, account_update: AccountUpdate, token: str = Header(None)):
     """
     Edit an existing account for the authenticated user.
 
@@ -139,9 +129,7 @@ async def update_account(
         dict: A message confirming the account update.
     """
     user_id = await verify_token(token)
-    account = await accounts_collection.find_one(
-        {"_id": ObjectId(account_id), "user_id": user_id}
-    )
+    account = await accounts_collection.find_one({"_id": ObjectId(account_id), "user_id": user_id})
 
     if not account:
         raise HTTPException(status_code=404, detail="Account not found")
@@ -155,9 +143,7 @@ async def update_account(
         "name": account_update.name,
     }
 
-    result = await accounts_collection.update_one(
-        {"_id": ObjectId(account_id)}, {"$set": update_data}
-    )
+    result = await accounts_collection.update_one({"_id": ObjectId(account_id)}, {"$set": update_data})
 
     if result.modified_count == 1:
         return {"message": "Account updated successfully"}
@@ -178,9 +164,7 @@ async def delete_account(account_id: str, token: str = Header(None)):
         dict: A message confirming the account deletion.
     """
     user_id = await verify_token(token)
-    account = await accounts_collection.find_one(
-        {"_id": ObjectId(account_id), "user_id": user_id}
-    )
+    account = await accounts_collection.find_one({"_id": ObjectId(account_id), "user_id": user_id})
 
     if not account:
         raise HTTPException(status_code=404, detail="Account not found")

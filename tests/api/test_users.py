@@ -13,26 +13,17 @@ from config import TOKEN_ALGORITHM, TOKEN_SECRET_KEY
 @pytest.mark.anyio
 class TestUserCreation:
     async def test_invalid_data(self, async_client: AsyncClient):
-        response = await async_client.post(
-            "/users/", json={"username": "", "password": ""}  # Invalid data
-        )
+        response = await async_client.post("/users/", json={"username": "", "password": ""})  # Invalid data
         assert response.status_code == 422
         assert response.json()["detail"] == "Invalid credential"
 
     async def test_valid(self, async_client: AsyncClient):
-        response = await async_client.post(
-            "/users/", json={"username": "usertestuser", "password": "usertestpassword"}
-        )
+        response = await async_client.post("/users/", json={"username": "usertestuser", "password": "usertestpassword"})
         assert response.status_code == 200, response.json()
-        assert (
-            response.json()["message"]
-            == "User and default accounts created successfully"
-        )
+        assert response.json()["message"] == "User and default accounts created successfully"
 
     async def test_duplicate(self, async_client: AsyncClient):
-        response = await async_client.post(
-            "/users/", json={"username": "usertestuser", "password": "usertestpassword"}
-        )
+        response = await async_client.post("/users/", json={"username": "usertestuser", "password": "usertestpassword"})
         assert response.status_code == 400
         assert response.json()["detail"] == "Username already exists"
 
@@ -56,9 +47,7 @@ class TestTokenCreation:
         assert response.status_code == 200, response
         token_id = response.json()["result"]["_id"]
         token = response.json()["result"]["token"]
-        response = await async_client.delete(
-            f"/users/token/{token_id}", headers={"token": token}
-        )
+        response = await async_client.delete(f"/users/token/{token_id}", headers={"token": token})
         assert response.status_code == 200, response
         response = await async_client.get("/users/", headers={"token": token})
         assert response.status_code == 401, response.json()
@@ -98,12 +87,9 @@ class TestTokenGetter:
         payload = {
             "sub": "507f1f77bcf86cd799439011",
             "username": "expired_user",
-            "exp": datetime.datetime.now(datetime.timezone.utc)
-            - datetime.timedelta(minutes=1),
+            "exp": datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(minutes=1),
         }
-        expired_token = jwt.encode(
-            payload, str(TOKEN_SECRET_KEY), algorithm=TOKEN_ALGORITHM or "HS256"
-        )
+        expired_token = jwt.encode(payload, str(TOKEN_SECRET_KEY), algorithm=TOKEN_ALGORITHM or "HS256")
         headers = {"token": expired_token}
 
         # Try to access user details with the expired token
@@ -118,9 +104,7 @@ class TestTokenUpdate:
         response = await async_client.get("/users/token/")
         assert response.status_code == 200
         token_id = response.json()["tokens"][0]["_id"]
-        response = await async_client.put(
-            f"/users/token/{token_id}", params={"new_expiry": 60}
-        )
+        response = await async_client.put(f"/users/token/{token_id}", params={"new_expiry": 60})
         assert response.status_code == 200, response.json()
         assert response.json()["message"] == "Token expiration updated successfully"
 
@@ -136,9 +120,7 @@ class TestTokenDelete:
         token_id = response.json()["result"]["_id"]
         response = await async_client.delete(f"/users/token/{token_id}")
         assert response.status_code == 200, response
-        assert (
-            response.json()["message"] == "Token deleted successfully"
-        ), response.json()
+        assert response.json()["message"] == "Token deleted successfully", response.json()
 
         response = await async_client.get(f"/users/token/{token_id}")
         assert response.status_code == 404
@@ -186,20 +168,15 @@ class TestUserUnauthenticated:
         payload = {
             "sub": None,
             "username": "nonexistent_user",
-            "exp": datetime.datetime.now(datetime.timezone.utc)
-            + datetime.timedelta(minutes=30),
+            "exp": datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes=30),
         }
-        fake_token = jwt.encode(
-            payload, str(TOKEN_SECRET_KEY), algorithm=TOKEN_ALGORITHM or "HS256"
-        )
+        fake_token = jwt.encode(payload, str(TOKEN_SECRET_KEY), algorithm=TOKEN_ALGORITHM or "HS256")
         headers = {"token": fake_token}
 
         # Try to access user details with the fake token
         response = await async_client.get("/users/", headers=headers)
         assert response.status_code == 401, response.json()
-        assert (
-            response.json()["detail"] == "Invalid authentication credentials"
-        ), response.json()
+        assert response.json()["detail"] == "Invalid authentication credentials", response.json()
 
     async def test_get_user(self, async_client: AsyncClient):
         # Make a deep copy of the original headers to restore later
@@ -237,6 +214,4 @@ class TestUserDelete:
     async def test_delete_user(self, async_client: AsyncClient):
         response = await async_client.delete("/users/")
         assert response.status_code == 200, response.json()
-        assert (
-            response.json()["message"] == "User deleted successfully"
-        ), response.json()
+        assert response.json()["message"] == "User deleted successfully", response.json()

@@ -15,24 +15,16 @@ def anyio_backend():
 
 @pytest.fixture(scope="session")
 async def async_client():
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test"
-    ) as client:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
         yield client
 
 
 @pytest.fixture(scope="session")
 async def async_client_auth():
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test"
-    ) as client:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
         # Create a user and log in to use for expenses tests
-        await client.post(
-            "/users/", json={"username": "testuser", "password": "testpassword"}
-        )
-        response = await client.post(
-            "/users/token/", data={"username": "testuser", "password": "testpassword"}
-        )
+        await client.post("/users/", json={"username": "testuser", "password": "testpassword"})
+        response = await client.post("/users/token/", data={"username": "testuser", "password": "testpassword"})
         token = response.json()["result"]["token"]
         client.headers.update({"token": token})
 
@@ -53,6 +45,4 @@ async def async_client_auth():
         # Teardown: Delete the user after the tests in this module
         response = await client.delete("/users/")
         assert response.status_code == 200, response.json()
-        assert (
-            response.json()["message"] == "User deleted successfully"
-        ), response.json()
+        assert response.json()["message"] == "User deleted successfully", response.json()

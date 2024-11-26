@@ -76,12 +76,6 @@ jobs:
           pylint api > tmp/pylint_output.txt || echo "PYLINT_EXIT_CODE=$?" >> $GITHUB_ENV
           cat tmp/pylint_output.txt
 
-      # - name: Run pytest
-      #   continue-on-error: true
-      #   run: |
-      #     echo "PYTEST_EXIT_CODE=0" >> $GITHUB_ENV
-      #     pytest --cov-report=json:tmp/coverage.json --junitxml=tmp/pytest_output.xml || echo "PYTEST_EXIT_CODE=$?" >> $GITHUB_ENV
-
       - name: Run pytest
         continue-on-error: true
         run: |

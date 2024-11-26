@@ -82,9 +82,7 @@ async def landing_page(request: Request, token: Optional[str] = Header(None)):
 
     try:
         username = await users.get_username(token)
-        return templates.TemplateResponse(
-            "landing.html", {"request": request, "username": username}
-        )
+        return templates.TemplateResponse("landing.html", {"request": request, "username": username})
     except HTTPException:
         return RedirectResponse(url="/login", status_code=302)
 
@@ -98,9 +96,7 @@ async def category(request: Request, token: Optional[str] = Header(None)):
 
     try:
         username = await users.get_username(token)
-        return templates.TemplateResponse(
-            "categories.html", {"request": request, "username": username}
-        )
+        return templates.TemplateResponse("categories.html", {"request": request, "username": username})
     except HTTPException:
         return RedirectResponse(url="/landing", status_code=302)
 
@@ -114,9 +110,7 @@ async def expense(request: Request, token: Optional[str] = Header(None)):
 
     try:
         username = await users.get_username(token)
-        return templates.TemplateResponse(
-            "expenses.html", {"request": request, "username": username}
-        )
+        return templates.TemplateResponse("expenses.html", {"request": request, "username": username})
     except HTTPException:
         return RedirectResponse(url="/landing", status_code=302)
 
@@ -130,9 +124,7 @@ async def barchart(request: Request, token: Optional[str] = Header(None)):
 
     try:
         username = await users.get_username(token)
-        return templates.TemplateResponse(
-            "barchart.html", {"request": request, "username": username}
-        )
+        return templates.TemplateResponse("barchart.html", {"request": request, "username": username})
     except HTTPException:
         return RedirectResponse(url="/landing", status_code=302)
 
@@ -146,9 +138,7 @@ async def piechart(request: Request, token: Optional[str] = Header(None)):
 
     try:
         username = await users.get_username(token)
-        return templates.TemplateResponse(
-            "piechart.html", {"request": request, "username": username}
-        )
+        return templates.TemplateResponse("piechart.html", {"request": request, "username": username})
     except HTTPException:
         return RedirectResponse(url="/landing", status_code=302)
 
