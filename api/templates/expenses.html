@@ -73,11 +73,37 @@
             color: red;
             margin-top: 10px;
         }
+        nav {
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 16px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <header>
     </header>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/landing">Accounts</a>
+        <a href="/categories">Categories</a>
+        <a href="/expenses">expenses</a>
+        <a href="/barchart">barchart</a>
+        <a href="/piechart">piechart</a>
+        <a href="/logout">Logout</a>
+    </nav>
     <main>
         <nav id="navbar" class="navbar navbar-expand-sm navbar-dark sticky-top">
             <a class="navbar-brand" href=".html">
