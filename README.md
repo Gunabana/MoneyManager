@@ -7,7 +7,6 @@
     - [Quality](#quality)
     - [Standards](#standards)
     - [Stats](#stats)
-      - [Tools & Technologies](#tools--technologies)
   - [Features](#features)
   - [Usage](#usage)
   - [Tech Stack](#tech-stack)
