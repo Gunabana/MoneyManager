@@ -7,47 +7,6 @@
     <link rel="stylesheet" href="/static/css/home.css">
     <title>Money Manager</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px;
-            text-align: center;
-        }
-
-        main {
-            flex: 1;
-            padding: 20px;
-        }
-
-        footer {
-            background-color: #4CAF50;
-            color: white;
-            text-align: center;
-            padding: 10px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: auto;
-        }
-
-        .form-container {
-            margin-top: 20px;
-            padding: 20px;
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
         .account-list {
             list-style: none;
             padding: 0;
@@ -60,61 +19,27 @@
             border-radius: 5px;
             background-color: #f5f5f5;
         }
-
-        .error-message {
-            color: red;
-            margin-top: 10px;
-        }
-
     </style>
 </head>
-<body>
-    <header>
-    </header>
-    <nav id="navbar" class="navbar navbar-expand-sm navbar-dark sticky-top">
-        <div class="container-fluid">
-            <nav class="main-nav">
-                <a class="navbar-brand" href="/landing">
-                    <img src="logo/MoneyManagerLOGO.png" alt="Logo">
-                </a>
-                <a href="/landing">Accounts</a>
-                <a href="/categories">Categories</a>
-                <a href="/expenses">expenses</a>
+    {% extends "base.html" %}
 
-                <div class="dropdown">
-                    <button class="dropbtn">Data Chart's
-                      <i class="fa fa-caret-down"></i>
-                    </button>
-                    <div class="dropdown-content">
-                        <a href="/barchart">Barchart</a>
-                        <a href="/piechart">Piechart</a>
-                    </div>
-                  </div>
-                <a href="/logout" class="split">Logout</a>
-             </nav>
+    {% block content %}
+    <div class="container">
+        <h2>Welcome, {{ username }}.</h2>
+    
+        <h2>Accounts</h2>
+        <ul id="accounts" class="account-list"></ul>
+    
+        <h3>Add New Account</h3>
+        <div class="form-container">
+            <input class="input-box" type="text" id="account-name" placeholder="Account Name" required>
+            <input class="input-box" type="number" id="account-balance" placeholder="Account Balance" required>
+            <input class="input-box" type="text" id="account-currency" placeholder="Currency (e.g., USD)" required>
+            <button id="add-account-btn">Add Account</button>
+            <div id="error-message" class="error-message"></div>
         </div>
-    </nav>
-    <main>
-        <div class="container">
-            <h2>Welcome, {{username}}.</h2>
-
-            <h2>Accounts</h2>
-            <ul id="accounts" class="account-list"></ul>
-
-            <h3>Add New Account</h3>
-            <div class="form-container">
-                <input class="input-box" type="text" id="account-name" placeholder="Account Name" required>
-                <input class="input-box" type="number" id="account-balance" placeholder="Account Balance" required>
-                <input class="input-box"type="text" id="account-currency" placeholder="Currency (e.g., USD)" required>
-                <button id="add-account-btn">Add Account</button>
-                <div id="error-message" class="error-message"></div>
-            </div>
-        </div>
-    </main>
-    <footer>
-        <p>© 2024 Money Manager. All rights reserved.</p>
-    </footer>
-
+    </div>
+    
     <script>
         async function fetchAndDisplayAccounts() {
             const token = localStorage.getItem('access_token');
@@ -123,7 +48,7 @@
                 window.location.href = '/login';
                 return;
             }
-
+    
             try {
                 const response = await fetch('/accounts/', {
                     method: 'GET',
@@ -132,7 +57,7 @@
                         'Content-Type': 'application/json'
                     }
                 });
-
+    
                 if (response.ok) {
                     const data = await response.json();
                     displayAccounts(data.accounts);
@@ -144,16 +69,16 @@
                 document.getElementById('error-message').textContent = 'An error occurred. Please try again later.';
             }
         }
-
+    
         function displayAccounts(accounts) {
             const accountsList = document.getElementById('accounts');
             accountsList.innerHTML = '';
-
+    
             if (accounts.length === 0) {
                 accountsList.innerHTML = '<li>No accounts found.</li>';
                 return;
             }
-
+    
             accounts.forEach(account => {
                 const accountItem = document.createElement('li');
                 accountItem.className = 'account-item';
@@ -161,18 +86,18 @@
                 accountsList.appendChild(accountItem);
             });
         }
-
+    
         async function addAccount() {
             const name = document.getElementById('account-name').value.trim();
             const balance = parseFloat(document.getElementById('account-balance').value.trim());
             const currency = document.getElementById('account-currency').value.trim();
             const token = localStorage.getItem('access_token');
-
+    
             if (!name || isNaN(balance) || !currency) {
                 document.getElementById('error-message').textContent = 'All fields are required and must be valid.';
                 return;
             }
-
+    
             try {
                 const response = await fetch('/accounts/', {
                     method: 'POST',
@@ -186,7 +111,7 @@
                         currency: currency
                     })
                 });
-
+    
                 if (response.ok) {
                     fetchAndDisplayAccounts(); // Refresh account list
                     document.getElementById('account-name').value = '';
@@ -201,11 +126,11 @@
                 document.getElementById('error-message').textContent = 'An error occurred. Please try again later.';
             }
         }
-
+    
         document.getElementById('add-account-btn').addEventListener('click', addAccount);
-
+    
         // Load accounts on page load
         window.onload = fetchAndDisplayAccounts;
     </script>
-</body>
+    {% endblock %}
 </html>

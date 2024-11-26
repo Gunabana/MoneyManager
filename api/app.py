@@ -26,11 +26,13 @@ async def lifespan(_app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="api/static"), name="static")
-# app.mount("/logo", StaticFiles(directory="docs/logo"), name="logo")
+app.mount("/logo", StaticFiles(directory="docs/logo"), name="logo")
+app.mount("/backgrounds", StaticFiles(directory="docs/backgrounds"), name="backgrounds")
 
+# templates
 templates = Jinja2Templates(directory="api/templates")
 
-# Include routers for different functionalities
+# routers for different functionalities
 app.include_router(users.router)
 app.include_router(accounts.router)
 app.include_router(categories.router)
@@ -38,11 +40,12 @@ app.include_router(expenses.router)
 app.include_router(analytics.router)
 
 
-# Add a default web app route
+# default web app route
 @app.get("/")
 async def read_root(request: Request):
     """Default pathway"""
-    return templates.TemplateResponse("home.html", {"request": request})
+    # return templates.TemplateResponse("home.html", {"request": request})
+    return RedirectResponse(url="/login", status_code=302)
 
 
 @app.get("/signup", response_class=HTMLResponse)
