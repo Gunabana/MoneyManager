@@ -105,10 +105,10 @@
                 expenseItem.id = `expense-${expense.id}`;
 
                 expenseItem.innerHTML = `
-                    Description: ${expense.description}, 
+                    Description: ${expense.description},
                     Amount: ${expense.amount} ${expense.currency},
-                    Category: ${expense.category}, 
-                    Account: ${expense.account_name}, 
+                    Category: ${expense.category},
+                    Account: ${expense.account_name},
                     Date: ${new Date(expense.date).toLocaleDateString()}
                      <button class="delete-btn" onclick="deleteExpense('${expense._id}')">Delete</button>
                 `;
