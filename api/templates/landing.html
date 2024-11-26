@@ -26,10 +26,9 @@
     {% block content %}
     <div class="container">
         <h2>Welcome, {{ username }}.</h2>
-    
+
         <h2>Accounts</h2>
         <ul id="accounts" class="account-list"></ul>
-    
         <h3>Add New Account</h3>
         <div class="form-container">
             <input class="input-box" type="text" id="account-name" placeholder="Account Name" required>
@@ -39,7 +38,7 @@
             <div id="error-message" class="error-message"></div>
         </div>
     </div>
-    
+
     <script>
         async function fetchAndDisplayAccounts() {
             const token = localStorage.getItem('access_token');
@@ -48,7 +47,7 @@
                 window.location.href = '/login';
                 return;
             }
-    
+
             try {
                 const response = await fetch('/accounts/', {
                     method: 'GET',
@@ -57,7 +56,7 @@
                         'Content-Type': 'application/json'
                     }
                 });
-    
+
                 if (response.ok) {
                     const data = await response.json();
                     displayAccounts(data.accounts);
@@ -69,16 +68,16 @@
                 document.getElementById('error-message').textContent = 'An error occurred. Please try again later.';
             }
         }
-    
+
         function displayAccounts(accounts) {
             const accountsList = document.getElementById('accounts');
             accountsList.innerHTML = '';
-    
+
             if (accounts.length === 0) {
                 accountsList.innerHTML = '<li>No accounts found.</li>';
                 return;
             }
-    
+
             accounts.forEach(account => {
                 const accountItem = document.createElement('li');
                 accountItem.className = 'account-item';
@@ -86,18 +85,18 @@
                 accountsList.appendChild(accountItem);
             });
         }
-    
+
         async function addAccount() {
             const name = document.getElementById('account-name').value.trim();
             const balance = parseFloat(document.getElementById('account-balance').value.trim());
             const currency = document.getElementById('account-currency').value.trim();
             const token = localStorage.getItem('access_token');
-    
+
             if (!name || isNaN(balance) || !currency) {
                 document.getElementById('error-message').textContent = 'All fields are required and must be valid.';
                 return;
             }
-    
+
             try {
                 const response = await fetch('/accounts/', {
                     method: 'POST',
@@ -111,7 +110,7 @@
                         currency: currency
                     })
                 });
-    
+
                 if (response.ok) {
                     fetchAndDisplayAccounts(); // Refresh account list
                     document.getElementById('account-name').value = '';
@@ -126,9 +125,9 @@
                 document.getElementById('error-message').textContent = 'An error occurred. Please try again later.';
             }
         }
-    
+
         document.getElementById('add-account-btn').addEventListener('click', addAccount);
-    
+
         // Load accounts on page load
         window.onload = fetchAndDisplayAccounts;
     </script>

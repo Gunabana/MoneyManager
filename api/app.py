@@ -42,9 +42,8 @@ app.include_router(analytics.router)
 
 # default web app route
 @app.get("/")
-async def read_root(request: Request):
+async def read_root():
     """Default pathway"""
-    # return templates.TemplateResponse("home.html", {"request": request})
     return RedirectResponse(url="/login", status_code=302)
 
 
