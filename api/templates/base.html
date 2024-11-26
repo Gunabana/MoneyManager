@@ -8,13 +8,15 @@
 </head>
 <body>
     <header>
+       
         <nav id="navbar" class="navbar navbar-expand-sm navbar-dark sticky-top" style="background-color: #4CAF50">
-            <a class="navbar-brand" href="/">
-                <img src="{{ url_for('static', path='logo/MoneyManagerLOGO.png') }}" alt="Logo" style="width:40px;">
-            </a>
+          
             <div class="container-fluid">
                 <nav class="main-nav">
-                    <a href="/">Home</a>
+                    <a class="navbar-brand" href="/landing">
+                        <img src="logo/MoneyManagerLOGO.png" alt="Logo" style="padding-left: 10px;" >
+                    </a>
+                    <a href="/landing" style="height: auto;"></a>
                     <a href="/landing">Accounts</a>
                     <a href="/categories">Categories</a>
                     <a href="/expenses">Expenses</a>
