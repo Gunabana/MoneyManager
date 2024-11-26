@@ -26,7 +26,7 @@ async def lifespan(_app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="api/static"), name="static")
-app.mount("/logo", StaticFiles(directory="docs/logo"), name="logo")
+# app.mount("/logo", StaticFiles(directory="docs/logo"), name="logo")
 
 templates = Jinja2Templates(directory="api/templates")
 
@@ -85,10 +85,7 @@ async def landing_page(request: Request, token: Optional[str] = Header(None)):
         return templates.TemplateResponse(
             "landing.html", {"request": request, "username": username}
         )
-    except HTTPException as e:
-        return RedirectResponse(url="/login", status_code=302)
-    except Exception as e:
-        print(f"Error in landing page: {e}")
+    except HTTPException:
         return RedirectResponse(url="/login", status_code=302)
 
 
@@ -103,10 +100,7 @@ async def landing_page(request: Request, token: Optional[str] = Header(None)):
         return templates.TemplateResponse(
             "categories.html", {"request": request, "username": username}
         )
-    except HTTPException as e:
-        return RedirectResponse(url="/landing", status_code=302)
-    except Exception as e:
-        print(f"Error in landing page: {e}")
+    except HTTPException:
         return RedirectResponse(url="/landing", status_code=302)
 
 
@@ -121,10 +115,7 @@ async def landing_page(request: Request, token: Optional[str] = Header(None)):
         return templates.TemplateResponse(
             "expenses.html", {"request": request, "username": username}
         )
-    except HTTPException as e:
-        return RedirectResponse(url="/landing", status_code=302)
-    except Exception as e:
-        print(f"Error in landing page: {e}")
+    except HTTPException:
         return RedirectResponse(url="/landing", status_code=302)
 
 
@@ -139,10 +130,7 @@ async def landing_page(request: Request, token: Optional[str] = Header(None)):
         return templates.TemplateResponse(
             "barchart.html", {"request": request, "username": username}
         )
-    except HTTPException as e:
-        return RedirectResponse(url="/landing", status_code=302)
-    except Exception as e:
-        print(f"Error in landing page: {e}")
+    except HTTPException:
         return RedirectResponse(url="/landing", status_code=302)
 
 
@@ -157,10 +145,7 @@ async def landing_page(request: Request, token: Optional[str] = Header(None)):
         return templates.TemplateResponse(
             "piechart.html", {"request": request, "username": username}
         )
-    except HTTPException as e:
-        return RedirectResponse(url="/landing", status_code=302)
-    except Exception as e:
-        print(f"Error in landing page: {e}")
+    except HTTPException:
         return RedirectResponse(url="/landing", status_code=302)
 
 

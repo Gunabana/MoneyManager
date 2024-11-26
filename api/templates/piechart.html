@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/static/css/home.css">  
-    <title>Money Manager - Bar Chart</title>
+    <link rel="stylesheet" href="/static/css/home.css">    
+    <title>Money Manager - Pie Chart</title>
     <style>
+        /* Global Styles */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -25,7 +25,6 @@
 
         main {
             flex: 1;
-          
         }
 
         footer {
@@ -73,6 +72,11 @@
             border: 1px solid #ddd;
             border-radius: 5px;
         }
+
+        footer p {
+            font-size: 14px;
+            color: #eee;
+        }
     </style>
 </head>
 <body>
@@ -105,8 +109,8 @@
         </nav>
         <div class="container">
             <p>Welcome, {{username}}.</p>
-
-            <h2>Generate Bar Chart</h2>
+            
+            <h2>Generate Pie Chart</h2>
             <div class="form-container">
                 <input type="number" id="chart-days" placeholder="Enter number of days" required>
                 <button id="generate-chart-btn">Generate Chart</button>
@@ -114,8 +118,8 @@
             </div>
 
             <div id="chart-container" class="chart-container">
-                <p id="chart-placeholder">Bar chart will appear here.</p>
-                <img id="chart-image" alt="Bar Chart" style="display:none;">
+                <p id="chart-placeholder">Pie chart will appear here.</p>
+                <img id="chart-image" alt="Pie Chart" style="display:none;">
             </div>
         </div>
     </main>
@@ -124,7 +128,7 @@
     </footer>
 
     <script>
-        async function generateBarChart() {
+        async function generatePieChart() {
             const days = document.getElementById("chart-days").value.trim();
             const token = localStorage.getItem("access_token");
 
@@ -140,7 +144,7 @@
                 return;
             }
 
-            const apiUrl = `/analytics/expense/bar?x_days=${days}`;
+            const apiUrl = `/analytics/expense/pie?x_days=${days}`;
 
             try {
                 document.getElementById("error-message").textContent = "";
@@ -171,7 +175,7 @@
                     console.error("Error response from server:", errorText);
 
                     document.getElementById("error-message").textContent =
-                        "Failed to fetch bar chart. Please check your input or try again later.";
+                        "Failed to fetch pie chart. Please check your input or try again later.";
                 }
             } catch (error) {
                 document.getElementById("error-message").textContent =
@@ -182,7 +186,7 @@
 
         document
             .getElementById("generate-chart-btn")
-            .addEventListener("click", generateBarChart);
+            .addEventListener("click", generatePieChart);
     </script>
 </body>
 </html>
