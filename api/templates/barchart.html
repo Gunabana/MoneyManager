@@ -11,30 +11,6 @@
             margin-top: 20px;
             text-align: center;
         }
-
-        img {
-            max-width: 100%;
-            height: auto;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        nav {
-            background-color: #333;
-            display: flex;
-            justify-content: center;
-            padding: 10px 0;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 16px;
-        }
-
-        nav a:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 {% extends "base.html" %}
@@ -104,7 +80,7 @@
                     console.error("Error response from server:", errorText);
 
                     document.getElementById("error-message").textContent =
-                        "Failed to fetch bar chart. Please check your input or try again later.";
+                    "Failed to fetch pie chart. Please ensure you have expenses entered or try again later.";
                 }
             } catch (error) {
                 document.getElementById("error-message").textContent =

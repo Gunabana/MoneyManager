@@ -85,7 +85,7 @@ async def landing_page(request: Request, token: Optional[str] = Header(None)):
     try:
         username = await users.get_username(token)
         return templates.TemplateResponse(
-            "landing.html", {"request": request, "username": username}
+            "accounts.html", {"request": request, "username": username}
         )
     except HTTPException:
         return RedirectResponse(url="/login", status_code=302)

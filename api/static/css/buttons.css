@@ -1,0 +1,24 @@
+.delete-btn, .update-btn {
+    margin-left: 10px;
+    cursor: pointer;
+    float: right;
+}
+
+.delete-btn {
+    color: red;
+}
+
+.edit-btn, .new-btn {
+    margin-left: 10px;
+    cursor: pointer;
+    float: right;
+    color: black;
+}
+
+.update-btn {
+    color: rgb(163, 113, 48);
+}
+
+.save-btn {
+    color: green;
+}
