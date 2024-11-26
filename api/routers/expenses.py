@@ -14,9 +14,11 @@ from pydantic import BaseModel
 from api.utils.auth import verify_token
 from config import MONGO_URI
 
+import chardet
 import io
 import pandas as pd
 from fastapi.responses import StreamingResponse
+from fastapi import File, UploadFile, HTTPException
 
 currency_converter = CurrencyConverter()
 
@@ -448,4 +450,77 @@ async def export_expenses_to_excel(token: str = Header(None)):
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         headers={"Content-Disposition": "attachment; filename=expenses.xlsx"},
     )
+
+@router.post("/import/csv")
+async def import_expenses_from_csv(token: str = Header(None), file: UploadFile = File(...)):
+    """
+    Import expenses from a CSV file.
+
+    Args:
+        token (str): Authentication token.
+        file (UploadFile): The uploaded CSV file.
+
+    Returns:
+        dict: Message indicating success or failure.
+    """
+    user_id = await verify_token(token)
+
+    if file.content_type != "text/csv":
+        raise HTTPException(status_code=400, detail="Invalid file format. Please upload a CSV file.")
+
+    try:
+        # Read the file content
+        content = await file.read()
+
+        # Detect encoding using chardet
+        import chardet
+        result = chardet.detect(content)
+        encoding = result['encoding']
+
+        # Read the CSV file
+        df = pd.read_csv(io.BytesIO(content), encoding=encoding)
+
+        # Validate required columns
+        required_columns = {"description", "amount", "currency", "category", "account_name", "date"}
+        if not required_columns.issubset(df.columns):
+            raise HTTPException(
+                status_code=400,
+                detail=f"Missing required columns. Expected: {', '.join(required_columns)}",
+            )
+
+        # Drop rows where all fields are NaN
+        df = df.dropna(how='all')
+
+        # Ensure 'date' column is properly formatted
+        df['date'] = pd.to_datetime(df['date'], errors='coerce')  # Convert invalid dates to NaT
+
+        # Drop rows with missing required fields
+        required_fields = ["description", "amount", "currency", "category", "account_name", "date"]
+        df = df.dropna(subset=required_fields)
+
+        # Process each row and add expenses to the database
+        for _, row in df.iterrows():
+            expense = {
+                "description": row["description"],
+                "amount": row["amount"],
+                "currency": row["currency"].upper(),
+                "category": row["category"],
+                "account_name": row["account_name"],
+                "date": row["date"],  # Already converted to datetime
+                "user_id": user_id,
+            }
+
+            # Check if the account exists for the user
+            account = await accounts_collection.find_one({"user_id": user_id, "name": expense["account_name"]})
+            if not account:
+                raise HTTPException(status_code=400, detail=f"Invalid account name: {expense['account_name']}")
+
+            # Insert expense into the database
+            await expenses_collection.insert_one(expense)
+
+        return {"message": "Expenses imported successfully."}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to process CSV: {str(e)}")
+
 

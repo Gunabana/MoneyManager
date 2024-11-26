@@ -42,6 +42,8 @@
             <button id="edit-expense-btn" class="edit-btn">Edit</button>
             <button id="new-expense-btn" class="new-btn">New</button>
             <button id="download-excel-btn" class="download-btn">Download Excel</button>
+            <input type="file" id="csv-file-input" class="csv-upload" accept=".csv">
+            <button id="import-csv-btn" class="import-btn">Import CSV</button>
         </h2>
 
         <ul id="expenses" class="expense-list"></ul>
@@ -61,6 +63,48 @@
 
     <script>
         let isEditing = false;
+
+        document.getElementById('import-csv-btn').addEventListener('click', async () => {
+            const fileInput = document.getElementById('csv-file-input');
+            const file = fileInput.files[0];
+            const token = localStorage.getItem('access_token');
+
+            if (!file) {
+                alert('Please select a CSV file to upload.');
+                return;
+            }
+
+            if (!token) {
+                alert('You need to log in first.');
+                window.location.href = '/login';
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('/expenses/import/csv', {
+                    method: 'POST',
+                    headers: {
+                        'token': token
+                    },
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert(result.message);
+                    fetchAndDisplayExpenses(); // Refresh the expenses list
+                } else {
+                    const error = await response.json();
+                    alert(error.detail || 'Failed to import expenses.');
+                }
+            } catch (error) {
+                alert('An error occurred. Please try again later.');
+            }
+        });
+
 
         document.getElementById('download-excel-btn').addEventListener('click', async () => {
             const token = localStorage.getItem('access_token');
