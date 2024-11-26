@@ -70,7 +70,7 @@ https://github.com/user-attachments/assets/91fdf9e0-9489-4e05-ab61-a7599e5463e1
 ![issue_open](https://img.shields.io/github/issues/Gunabana/MoneyManager.svg?style=plastic&)
 ![issue_close](https://img.shields.io/github/issues-closed/Gunabana/MoneyManager.svg?style=plastic&)
 <!-- TODO: UPDATED # COMMITS -->
-![commits_since_last_project](https://img.shields.io/github/commits-since/gitsetgopack/MoneyManager/v2023.f.3.svg?style=plastic&)
+![commits_since_last_project](https://img.shields.io/github/commits-since/gitsetgopack/MoneyManager/v2024.f.2-alpha.svg?style=plastic&)
 ![repo_size](https://img.shields.io/github/repo-size/Gunabana/MoneyManager?style=plastic&)
 ![forks](https://img.shields.io/github/forks/Gunabana/MoneyManager?style=plastic&)
 ![stars](https://img.shields.io/github/stars/Gunabana/MoneyManager?style=plastic&)
