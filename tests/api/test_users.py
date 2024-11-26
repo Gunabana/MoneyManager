@@ -1,4 +1,3 @@
-# test_user_expenses.py
 import datetime
 from copy import deepcopy
 
