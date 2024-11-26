@@ -3,11 +3,12 @@ This module defines the main FastAPI application for Money Manager.
 """
 
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import Optional
 
 import uvicorn
 from fastapi import FastAPI, Header, HTTPException, Request, Response
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -25,6 +26,7 @@ async def lifespan(_app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="api/static"), name="static")
+app.mount("/logo", StaticFiles(directory="docs/logo"), name="logo")
 
 templates = Jinja2Templates(directory="api/templates")
 
@@ -83,8 +85,91 @@ async def landing_page(request: Request, token: Optional[str] = Header(None)):
         return templates.TemplateResponse(
             "landing.html", {"request": request, "username": username}
         )
-    except HTTPException:
+    except HTTPException as e:
         return RedirectResponse(url="/login", status_code=302)
+    except Exception as e:
+        print(f"Error in landing page: {e}")
+        return RedirectResponse(url="/login", status_code=302)
+
+
+@app.get("/categories", response_class=HTMLResponse)
+async def landing_page(request: Request, token: Optional[str] = Header(None)):
+    token = request.cookies.get("access_token")  # retrieve token from cookies
+    if not token:
+        return RedirectResponse(url="/login", status_code=302)
+
+    try:
+        username = await users.get_username(token)
+        return templates.TemplateResponse(
+            "categories.html", {"request": request, "username": username}
+        )
+    except HTTPException as e:
+        return RedirectResponse(url="/landing", status_code=302)
+    except Exception as e:
+        print(f"Error in landing page: {e}")
+        return RedirectResponse(url="/landing", status_code=302)
+
+
+@app.get("/expenses", response_class=HTMLResponse)
+async def landing_page(request: Request, token: Optional[str] = Header(None)):
+    token = request.cookies.get("access_token")  # retrieve token from cookies
+    if not token:
+        return RedirectResponse(url="/login", status_code=302)
+
+    try:
+        username = await users.get_username(token)
+        return templates.TemplateResponse(
+            "expenses.html", {"request": request, "username": username}
+        )
+    except HTTPException as e:
+        return RedirectResponse(url="/landing", status_code=302)
+    except Exception as e:
+        print(f"Error in landing page: {e}")
+        return RedirectResponse(url="/landing", status_code=302)
+
+
+@app.get("/barchart", response_class=HTMLResponse)
+async def landing_page(request: Request, token: Optional[str] = Header(None)):
+    token = request.cookies.get("access_token")  # retrieve token from cookies
+    if not token:
+        return RedirectResponse(url="/login", status_code=302)
+
+    try:
+        username = await users.get_username(token)
+        return templates.TemplateResponse(
+            "barchart.html", {"request": request, "username": username}
+        )
+    except HTTPException as e:
+        return RedirectResponse(url="/landing", status_code=302)
+    except Exception as e:
+        print(f"Error in landing page: {e}")
+        return RedirectResponse(url="/landing", status_code=302)
+
+
+@app.get("/piechart", response_class=HTMLResponse)
+async def landing_page(request: Request, token: Optional[str] = Header(None)):
+    token = request.cookies.get("access_token")  # retrieve token from cookies
+    if not token:
+        return RedirectResponse(url="/login", status_code=302)
+
+    try:
+        username = await users.get_username(token)
+        return templates.TemplateResponse(
+            "piechart.html", {"request": request, "username": username}
+        )
+    except HTTPException as e:
+        return RedirectResponse(url="/landing", status_code=302)
+    except Exception as e:
+        print(f"Error in landing page: {e}")
+        return RedirectResponse(url="/landing", status_code=302)
+
+
+@app.get("/docs/logo/MoneyManagerLOGO.png")
+async def get_image():
+    image_path = Path("/docs/logo/MoneyManagerLOGO.png")
+    if not image_path.is_file():
+        return {"error": "image not found"}
+    return FileResponse(image_path)
 
 
 if __name__ == "__main__":

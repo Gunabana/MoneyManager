@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/home.css">  
+    <title>Money Manager - Bar Chart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        main {
+            flex: 1;
+          
+        }
+
+        footer {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .form-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .form-container input,
+        .form-container button {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .chart-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+    </header>
+    <main>
+        <nav id="navbar" class="navbar navbar-expand-sm navbar-dark sticky-top">
+            <a class="navbar-brand" href=".html">
+                <img src="../docs/logo/MoneyManagerLOGO.png" alt="Logo" style="width:40px;">
+            </a>
+            <div class="container-fluid">
+                <nav class="main-nav">
+                    <a href="/" style="background-image: url('../../docs/logo/MoneyManagerLOGO.png');"></a>
+                    <a href="/landing">Accounts</a>
+                    <a href="/categories">Categories</a>
+                    <a href="/expenses">expenses</a>
+                   
+                    <div class="dropdown">
+                        <button class="dropbtn">Data Chart's
+                          <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="/barchart">Barchart</a>
+                            <a href="/piechart">Piechart</a>
+                        </div>
+                      </div> 
+                    <a href="/logout" class="split">Logout</a>
+                 </nav>
+            </div>
+        </nav>
+        <div class="container">
+            <p>Welcome, {{username}}.</p>
+            <p>This page is accessible after logging in (validated with a JWT token).</p>
+            <p><a href="/logout">Logout</a></p>
+
+            <h2>Generate Bar Chart</h2>
+            <div class="form-container">
+                <input type="number" id="chart-days" placeholder="Enter number of days" required>
+                <button id="generate-chart-btn">Generate Chart</button>
+                <div id="error-message" class="error-message"></div>
+            </div>
+
+            <div id="chart-container" class="chart-container">
+                <p id="chart-placeholder">Bar chart will appear here.</p>
+                <img id="chart-image" alt="Bar Chart" style="display:none;">
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>© 2024 Money Manager. All rights reserved.</p>
+    </footer>
+
+    <script>
+        async function generateBarChart() {
+            const days = document.getElementById('chart-days').value.trim();
+            const token = localStorage.getItem('access_token');
+
+            if (!token) {
+                alert('You need to log in first.');
+                window.location.href = '/login';
+                return;
+            }
+
+            if (!days || isNaN(days) || days <= 0) {
+                document.getElementById('error-message').textContent = 'Please enter a valid number of days.';
+                return;
+            }
+
+            const apiUrl = `/barchart/?days=${days}&token=${token}`;
+
+            try {
+                document.getElementById('error-message').textContent = '';
+                document.getElementById('chart-placeholder').textContent = 'Loading chart...';
+                document.getElementById('chart-image').style.display = 'none';
+
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'token': token,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const imageUrl = URL.createObjectURL(blob);
+
+                    const chartImage = document.getElementById('chart-image');
+                    chartImage.src = imageUrl;
+                    chartImage.style.display = 'block';
+                    document.getElementById('chart-placeholder').style.display = 'none';
+                } else {
+                    const error = await response.json();
+                    document.getElementById('error-message').textContent = error.detail || 'Failed to fetch bar chart.';
+                }
+            } catch (error) {
+                document.getElementById('error-message').textContent = 'An error occurred. Please try again later.';
+            }
+        }
+
+        document.getElementById('generate-chart-btn').addEventListener('click', generateBarChart);
+    </script>
+</body>
+</html>
