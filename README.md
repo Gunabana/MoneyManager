@@ -19,6 +19,7 @@
     - [Code Coverage](#code-coverage)
   - [Configuration](#configuration)
   - [Troubleshooting](#troubleshooting)
+  - [Support](#support)
   - [🚀 Future Enhancements](#-future-enhancements)
   - [Contributing](#contributing)
   - [LICENSE](#license)
