@@ -75,7 +75,6 @@ make test
 ```
 
 ### 6. Run Formatters and Linters
-
 Before committing, make sure your code is formatted correctly:
 
 ```bash
