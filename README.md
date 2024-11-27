@@ -44,7 +44,9 @@ A REST API application for managing expenses. Build your own automation—be it 
 
 ## Project Overview
 
-https://github.com/user-attachments/assets/91fdf9e0-9489-4e05-ab61-a7599e5463e1
+https://github.com/user-attachments/assets/8d8c23f0-48ff-483d-bbba-f48b4ced4a34
+
+https://github.com/user-attachments/assets/fe50f971-eaa4-441f-b9e0-840b65e186cf
 
 ### Quality
 
@@ -55,6 +57,7 @@ https://github.com/user-attachments/assets/91fdf9e0-9489-4e05-ab61-a7599e5463e1
 [![badge_black](https://img.shields.io/badge/black_formatter-passing-brightgreen?style=plastic&labelColor=black)](https://github.com/Gunabana/MoneyManager/actions/runs/12042743832)
 [![badge_mypy](https://img.shields.io/badge/mypy-passing-brightgreen?style=plastic)](https://github.com/Gunabana/MoneyManager/actions/runs/12042743832)
 [![badge_bandit](https://img.shields.io/badge/bandit-passing-brightgreen?style=plastic)](https://github.com/Gunabana/MoneyManager/actions/runs/12042743832)
+
 
 ### Standards
 
@@ -201,6 +204,15 @@ For **contributors**, we’ve designed the system to be as modular as possible, 
 
 Alternatively, you’re welcome to submit a bug report in our repository. Make sure to follow the steps outlined in [CONTRIBUTING.md](CONTRIBUTING.md) for reporting issues.
 
+## Support
+Concerns with the software? Please get in touch with us via one of the methods below. We are delighted to address any queries you may have about the program.
+
+Please contact us if you experience any problems with the setting up the problem or would like help understanding the code. You can email us at gunabanagroup [at] gmail [dot] com or by clicking the icon below.
+
+<a href = "mailto:gunabanagroup@gmail.com">
+<img width = "35px" src = "https://user-images.githubusercontent.com/73664200/194786335-12b1d3a6-b272-4896-9bd7-d615e28847f3.png"/>
+</a>
+
 ## 🚀 Future Enhancements
 
 - **External Integrations**: Explore integrations with platforms like Discord, WhatsApp, and Slack to provide seamless notifications and financial management within users' preferred communication apps.
@@ -237,4 +249,4 @@ Please note that we have a [Code of Conduct](CODE_OF_CONDUCT.md) that all contri
 
 ---
 
-Thank you for using MoneyManager! Follow this page to stay updated on new features and improvements.
+Thank you for using MoneyManager!
