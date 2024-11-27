@@ -398,9 +398,10 @@ async def update_expense(
     raise HTTPException(status_code=500, detail="Failed to update expense")
 
 
-@router.get("/export/excel")
+
 @router.get("/export/excel")
 async def export_expenses_to_excel(token: str = Header(None)):
+    """ Export expense data to an Excel file """
     user_id = await verify_token(token)
     expenses = await expenses_collection.find({"user_id": user_id}).to_list(None)
 
@@ -431,7 +432,7 @@ async def export_expenses_to_excel(token: str = Header(None)):
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine="openpyxl") as writer:
         df.to_excel(writer, index=False, sheet_name="Expenses")
-        workbook = writer.book
+        # workbook = writer.book
         sheet = writer.sheets["Expenses"]
 
         # Auto-adjust column width
@@ -478,12 +479,7 @@ async def import_expenses_from_csv(
         )
 
     try:
-        # Read the file content
         content = await file.read()
-
-        # Detect encoding using chardet
-        import chardet
-
         result = chardet.detect(content)
         encoding = result["encoding"]
 
@@ -552,4 +548,4 @@ async def import_expenses_from_csv(
         return {"message": "Expenses imported successfully."}
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to process CSV: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to process CSV: {str(e)}") from e

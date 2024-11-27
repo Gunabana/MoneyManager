@@ -1,7 +1,10 @@
 # test_expenses.py
 import datetime
+import io
 from unittest.mock import patch
 
+import openpyxl
+import pandas as pd
 import pytest
 from bson import ObjectId
 from fastapi import HTTPException
@@ -10,9 +13,6 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 import api.routers.expenses
 from config import MONGO_URI
-import io
-import openpyxl
-import pandas as pd
 
 # MongoDB setup
 client: AsyncIOMotorClient = AsyncIOMotorClient(MONGO_URI)
@@ -21,6 +21,7 @@ users_collection = db.users
 expenses_collection = db.expenses
 accounts_collection = db.accounts
 tokens_collection = db.tokens
+
 
 class TestConvertCurrency:
     # Test case for when "from_cur" and "to_cur" are the same
