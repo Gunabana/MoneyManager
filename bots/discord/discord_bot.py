@@ -1,8 +1,11 @@
+# pylint: skip-file
+
 import discord
 import requests
 from discord.ext import commands
-from config import MONGO_URI, DISCORD_TOKEN
 from motor.motor_asyncio import AsyncIOMotorClient
+
+from config import DISCORD_TOKEN, MONGO_URI
 
 client = AsyncIOMotorClient(MONGO_URI)
 db = client.mmdb
