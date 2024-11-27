@@ -44,8 +44,7 @@ A REST API application for managing expenses. Build your own automation—be it 
 
 ## Project Overview
 
-https://github.com/user-attachments/assets/91fdf9e0-9489-4e05-ab61-a7599e5463e1
-
+https://github.com/user-attachments/assets/8d8c23f0-48ff-483d-bbba-f48b4ced4a34
 ### Quality
 
 [![badge_pytest_status](https://img.shields.io/badge/PyTest-passing-brightgreen?style=plastic&logo=pytest&logoColor=white)](https://github.com/Gunabana/MoneyManager/actions/runs/12042802924)
