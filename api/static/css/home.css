@@ -18,7 +18,7 @@ main {
 }
 
 footer {
-  background-color: #4CAF50;
+  background-color: #323532;
   color: white;
   text-align: center;
   /* padding: 10px; */
@@ -33,7 +33,7 @@ footer {
   margin-top: 20px;
   padding: 20px;
   background: #f9f9f9;
-  border: 1px solid #ddd;
+  border: 2px solid #078b00;
   border-radius: 5px;
 }
 
@@ -42,11 +42,9 @@ a {
   text-decoration: none;
 }
 
-a:hover {
-  text-decoration: underline;
-}
+
 nav {
-  background-color: #4CAF50;
+  background-color: #323532;
   overflow: hidden;
 }
 
@@ -59,8 +57,10 @@ nav a{
   font-size: 17px;
 }
 nav img{
+  overflow: auto;
+  height: auto;
+  width: 40px;
   position: absolute;
-  width:40px;
   top: 1;
   left:0;
 }
@@ -136,4 +136,7 @@ nav a.split {
 .error-message {
   color: red;
   margin-top: 10px;
+}
+.input-box{
+  background: #4CAF50;
 }

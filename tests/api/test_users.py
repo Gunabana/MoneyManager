@@ -261,3 +261,4 @@ class TestLoginLogout:
             data={"username": "loginuser", "password": "badpassword"},
         )
         assert response.status_code == 401, response.json()
+
