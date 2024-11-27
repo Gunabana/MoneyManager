@@ -20,3 +20,4 @@ TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", None)
 TELEGRAM_BOT_API_BASE_URL = os.getenv(
     "TELEGRAM_BOT_API_BASE_URL", "http://localhost:9999"
 )
+DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")

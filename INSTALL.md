@@ -82,15 +82,18 @@ Before beginning the installation, please ensure you have the following installe
     API_BIND_PORT=
     TELEGRAM_BOT_TOKEN=
     TELEGRAM_BOT_API_BASE_URL=
+    DISCORD_TOKEN=
     ```
     * A TOKEN_SECRET_KEY can be generated on Linux using `openssl rand -base64 64`
     * A TOKEN_ALGORITHM of `HS256` is recommended
     * By default, the API host and port will be 0.0.0.0 and 9999 respectively
     * See the README.md regarding the TOKEN and URL for the telegram bot
+    * Please follow Discord's instructions on how to setup and obtain a Discord bot token.
 
 5. **Starting Application**
 
-    Please reference Available Make Commands below. If you simply want to run the webapp on a Linux system (or WSL), run the two following commands at the MoneyManager's root directory: 1) `make run` in one terminal and 2) `make start_database` in a second terminal. The webapp will be viewable at http://127.0.0.1:9999/ by default.
+    Please reference Available Make Commands below. If you simply want to run the webapp on a Linux system (or WSL), run the two following commands at the MoneyManager's root directory: 1) `make run` in one terminal and 2) `make start_database` in a second terminal. The webapp will be viewable at http://127.0.0.1:9999/ by default. For testing, especially when developing bots that require
+    a non-locally hosted site, there are a few options as listed <a href="https://pinggy.io/blog/best_ngrok_alternatives/">here</a>.
 
 
 
