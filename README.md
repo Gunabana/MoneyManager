@@ -65,7 +65,7 @@ https://github.com/user-attachments/assets/fe50f971-eaa4-441f-b9e0-840b65e186cf
 ![black](https://img.shields.io/badge/code%20style-black-black?style=plastic&)
 ![license](https://img.shields.io/github/license/Gunabana/MoneyManager?style=plastic&)
 ![maintained](https://img.shields.io/badge/Maintained%3F-yes-green.svg?style=plastic&)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14027400.svg)](https://doi.org/10.5281/zenodo.14027400)
+[![DOI](https://zenodo.org/badge/886888462.svg)](https://doi.org/10.5281/zenodo.14227144)
 <!-- TODO: UPDATED DOI -->
 
 ### Stats
