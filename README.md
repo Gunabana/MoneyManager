@@ -201,6 +201,15 @@ For **contributors**, we’ve designed the system to be as modular as possible, 
 
 Alternatively, you’re welcome to submit a bug report in our repository. Make sure to follow the steps outlined in [CONTRIBUTING.md](CONTRIBUTING.md) for reporting issues.
 
+## Support
+Concerns with the software? Please get in touch with us via one of the methods below. We are delighted to address any queries you may have about the program.
+
+Please contact us if you experience any problems with the setting up the problem or would like help understanding the code. You can email us at gunabanagroup [at] gmail [dot] com or by clicking the icon below.
+
+<a href = "mailto:gunabanagroup@gmail.com">
+<img width = "35px" src = "https://user-images.githubusercontent.com/73664200/194786335-12b1d3a6-b272-4896-9bd7-d615e28847f3.png"/>
+</a>
+
 ## 🚀 Future Enhancements
 
 - **External Integrations**: Explore integrations with platforms like Discord, WhatsApp, and Slack to provide seamless notifications and financial management within users' preferred communication apps.
