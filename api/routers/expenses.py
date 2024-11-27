@@ -3,22 +3,20 @@ This module provides endpoints for managing user expenses in the Money Manager a
 """
 
 import datetime
+import io
 from typing import Optional
 
+import chardet
+import pandas as pd
 from bson import ObjectId
 from currency_converter import CurrencyConverter  # type: ignore
-from fastapi import APIRouter, Header, HTTPException
+from fastapi import APIRouter, File, Header, HTTPException, UploadFile
+from fastapi.responses import StreamingResponse
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel
 
 from api.utils.auth import verify_token
 from config import MONGO_URI
-
-import chardet
-import io
-import pandas as pd
-from fastapi.responses import StreamingResponse
-from fastapi import File, UploadFile, HTTPException
 
 currency_converter = CurrencyConverter()
 
@@ -411,7 +409,9 @@ async def export_expenses_to_excel(token: str = Header(None)):
 
     # Convert MongoDB documents to DataFrame
     for expense in expenses:
-        expense["_id"] = str(expense["_id"])  # Convert ObjectId to string for compatibility
+        expense["_id"] = str(
+            expense["_id"]
+        )  # Convert ObjectId to string for compatibility
 
     df = pd.DataFrame(expenses)
 
@@ -420,8 +420,12 @@ async def export_expenses_to_excel(token: str = Header(None)):
 
     # Move 'description' column to the first position
     if "description" in df.columns:
-        description_column = df.pop("description")  # Remove and get 'description' column
-        df.insert(0, "description", description_column)  # Insert it at the first position
+        description_column = df.pop(
+            "description"
+        )  # Remove and get 'description' column
+        df.insert(
+            0, "description", description_column
+        )  # Insert it at the first position
 
     # Create an in-memory file
     output = io.BytesIO()
@@ -451,8 +455,11 @@ async def export_expenses_to_excel(token: str = Header(None)):
         headers={"Content-Disposition": "attachment; filename=expenses.xlsx"},
     )
 
+
 @router.post("/import/csv")
-async def import_expenses_from_csv(token: str = Header(None), file: UploadFile = File(...)):
+async def import_expenses_from_csv(
+    token: str = Header(None), file: UploadFile = File(...)
+):
     """
     Import expenses from a CSV file.
 
@@ -466,7 +473,9 @@ async def import_expenses_from_csv(token: str = Header(None), file: UploadFile =
     user_id = await verify_token(token)
 
     if file.content_type != "text/csv":
-        raise HTTPException(status_code=400, detail="Invalid file format. Please upload a CSV file.")
+        raise HTTPException(
+            status_code=400, detail="Invalid file format. Please upload a CSV file."
+        )
 
     try:
         # Read the file content
@@ -474,14 +483,22 @@ async def import_expenses_from_csv(token: str = Header(None), file: UploadFile =
 
         # Detect encoding using chardet
         import chardet
+
         result = chardet.detect(content)
-        encoding = result['encoding']
+        encoding = result["encoding"]
 
         # Read the CSV file
         df = pd.read_csv(io.BytesIO(content), encoding=encoding)
 
         # Validate required columns
-        required_columns = {"description", "amount", "currency", "category", "account_name", "date"}
+        required_columns = {
+            "description",
+            "amount",
+            "currency",
+            "category",
+            "account_name",
+            "date",
+        }
         if not required_columns.issubset(df.columns):
             raise HTTPException(
                 status_code=400,
@@ -489,13 +506,22 @@ async def import_expenses_from_csv(token: str = Header(None), file: UploadFile =
             )
 
         # Drop rows where all fields are NaN
-        df = df.dropna(how='all')
+        df = df.dropna(how="all")
 
         # Ensure 'date' column is properly formatted
-        df['date'] = pd.to_datetime(df['date'], errors='coerce')  # Convert invalid dates to NaT
+        df["date"] = pd.to_datetime(
+            df["date"], errors="coerce"
+        )  # Convert invalid dates to NaT
 
         # Drop rows with missing required fields
-        required_fields = ["description", "amount", "currency", "category", "account_name", "date"]
+        required_fields = [
+            "description",
+            "amount",
+            "currency",
+            "category",
+            "account_name",
+            "date",
+        ]
         df = df.dropna(subset=required_fields)
 
         # Process each row and add expenses to the database
@@ -511,9 +537,14 @@ async def import_expenses_from_csv(token: str = Header(None), file: UploadFile =
             }
 
             # Check if the account exists for the user
-            account = await accounts_collection.find_one({"user_id": user_id, "name": expense["account_name"]})
+            account = await accounts_collection.find_one(
+                {"user_id": user_id, "name": expense["account_name"]}
+            )
             if not account:
-                raise HTTPException(status_code=400, detail=f"Invalid account name: {expense['account_name']}")
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Invalid account name: {expense['account_name']}",
+                )
 
             # Insert expense into the database
             await expenses_collection.insert_one(expense)
@@ -522,5 +553,3 @@ async def import_expenses_from_csv(token: str = Header(None), file: UploadFile =
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to process CSV: {str(e)}")
-
-
