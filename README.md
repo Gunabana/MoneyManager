@@ -216,7 +216,6 @@ Alternatively, you’re welcome to submit a bug report in our repository. Make s
 Thank you for your interest in contributing to MoneyManager! Your contributions are greatly appreciated, and this guide will help you get started. For full details on contributing, please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) file, which provides comprehensive instructions and guidelines.
 
 ## LICENSE
-
 By contributing to MoneyManager, you agree that your contributions will fall under the project’s open-source license. Please take a moment to review and understand the licensing terms before contributing. The specific license details can be found in the [LICENSE](LICENSE) file.
 
 ## 🤝 Contributors

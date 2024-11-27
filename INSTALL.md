@@ -25,7 +25,6 @@ Before beginning the installation, please ensure you have the following installe
 - **Docker** (for running MongoDB in a Docker container during testing)
 
 ## Installation Steps
-
 0. **Please Note**
 
     The Makefile assumes that python3 can be executed with the name of python.
