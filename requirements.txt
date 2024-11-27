@@ -21,3 +21,4 @@ python-telegram-bot
 requests
 python-dotenv
 pytest-asyncio
+openpyxl

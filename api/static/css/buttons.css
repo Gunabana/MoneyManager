@@ -1,4 +1,4 @@
-.delete-btn, .update-btn {
+.delete-btn, .update-btn, .download-btn, .import-btn {
     margin-left: 10px;
     cursor: pointer;
     float: right;
@@ -6,6 +6,9 @@
 
 .delete-btn {
     color: red;
+}
+.download-btn {
+    color: blue; /* Optional: Different color to distinguish the button */
 }
 
 .edit-btn, .new-btn {
@@ -22,3 +25,14 @@
 .save-btn {
     color: green;
 }
+
+.csv-upload {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.import-btn {
+    color: green;
+    cursor: pointer;
+}
+
