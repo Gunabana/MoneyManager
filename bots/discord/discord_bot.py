@@ -18,10 +18,12 @@ API_BASE_URL = "https://rnvcj-172-58-251-251.a.free.pinggy.link"  # Replace with
 LOGIN_STATE = {}
 SIGNUP_STATE = {}
 
+
 @bot.event
 async def on_ready():
     """Triggered when the bot is ready and connected to Discord."""
-    print(f'Logged in as {bot.user}')
+    print(f"Logged in as {bot.user}")
+
 
 @bot.command()
 async def expose(ctx):
@@ -29,10 +31,14 @@ async def expose(ctx):
     print("Expose command triggered!")
     await ctx.send(f"Your web app is now exposed at: {API_BASE_URL}")
 
+
 @bot.command()
 async def start(ctx):
     """Handle the start command"""
-    await ctx.send("Welcome to Money Manager! Use !signup to create an account or !login to log in.")
+    await ctx.send(
+        "Welcome to Money Manager! Use !signup to create an account or !login to log in."
+    )
+
 
 @bot.command()
 async def signup(ctx):
@@ -41,12 +47,14 @@ async def signup(ctx):
     SIGNUP_STATE[user_id] = "awaiting_username"
     await ctx.send("To sign up, please enter your desired username:")
 
+
 @bot.command()
 async def login(ctx):
     """Handle the login command"""
     user_id = ctx.author.id
     LOGIN_STATE[user_id] = "awaiting_username"
     await ctx.send("Please enter your username:")
+
 
 @bot.command()
 async def cancel(ctx):
@@ -61,6 +69,7 @@ async def cancel(ctx):
     else:
         await ctx.send("There is no ongoing process to cancel.")
 
+
 # Handle messages from users for signup process
 @bot.event
 async def on_message(message):
@@ -73,16 +82,21 @@ async def on_message(message):
     if user_id in SIGNUP_STATE and SIGNUP_STATE[user_id] == "awaiting_username":
         username = message.content.strip()
         SIGNUP_STATE[user_id] = "awaiting_password"  # Next step: password input
-        await message.channel.send(f"Username {username} received! Now, please enter your password:")
+        await message.channel.send(
+            f"Username {username} received! Now, please enter your password:"
+        )
 
         # Store the username in a temporary dictionary (or database) for the next step
-        SIGNUP_STATE[user_id] = {'username': username, 'step': 'awaiting_password'}
+        SIGNUP_STATE[user_id] = {"username": username, "step": "awaiting_password"}
         return
 
     # If the user is in the signup process and awaiting a password
-    if user_id in SIGNUP_STATE and SIGNUP_STATE[user_id].get('step') == 'awaiting_password':
+    if (
+        user_id in SIGNUP_STATE
+        and SIGNUP_STATE[user_id].get("step") == "awaiting_password"
+    ):
         password = message.content.strip()
-        username = SIGNUP_STATE[user_id]['username']  # Retrieve username from earlier
+        username = SIGNUP_STATE[user_id]["username"]  # Retrieve username from earlier
 
         # Proceed with signup attempt
         await attempt_signup(message, username, password)
@@ -93,6 +107,7 @@ async def on_message(message):
 
     # Let commands still work normally (if no signup process is active)
     await bot.process_commands(message)
+
 
 async def attempt_signup(message, username: str, password: str):
     """Attempt to sign the user up with the provided username and password."""
@@ -123,8 +138,13 @@ async def attempt_signup(message, username: str, password: str):
             await discord_collection.insert_one(user_data)
 
         # Send the message to the channel where the user sent their signup request
-        await message.channel.send("Signup successful! You can now log in using !login.")
+        await message.channel.send(
+            "Signup successful! You can now log in using !login."
+        )
         return
-    await message.channel.send(f"An error occurred: {response.json().get('detail', 'Unknown error')}\nPlease try again.")
+    await message.channel.send(
+        f"An error occurred: {response.json().get('detail', 'Unknown error')}\nPlease try again."
+    )
+
 
 bot.run(DISCORD_TOKEN)
