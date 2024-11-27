@@ -51,13 +51,13 @@ https://github.com/user-attachments/assets/fe50f971-eaa4-441f-b9e0-840b65e186cf
 
 ### Quality
 
-[![badge_pytest_status](https://img.shields.io/badge/PyTest-passing-brightgreen?style=plastic&logo=pytest&logoColor=white)](https://github.com/Gunabana/MoneyManager/actions/runs/12043833609)
-[![badge_code_coverage](https://img.shields.io/badge/coverage-92%25-brightgreen?style=plastic)](https://github.com/Gunabana/MoneyManager/actions/runs/12043833609)
+[![badge_pytest_status](https://img.shields.io/badge/PyTest-passing-brightgreen?style=plastic&logo=pytest&logoColor=white)](https://github.com/Gunabana/MoneyManager/actions/runs/12044031981)
+[![badge_code_coverage](https://img.shields.io/badge/coverage-92%25-brightgreen?style=plastic)](https://github.com/Gunabana/MoneyManager/actions/runs/12044031981)
 [![badge_total_tests](https://img.shields.io/badge/tests-132-blue?style=plastic&logo=pytest&logoColor=white)](https://github.com/Gunabana/MoneyManager/tree/main/tests)
-[![badge_pylint](https://img.shields.io/badge/pylint-10.00-brightgreen?style=plastic)](https://github.com/Gunabana/MoneyManager/actions/runs/12043833609)
-[![badge_black](https://img.shields.io/badge/black_formatter-passing-brightgreen?style=plastic&labelColor=black)](https://github.com/Gunabana/MoneyManager/actions/runs/12043833609)
-[![badge_mypy](https://img.shields.io/badge/mypy-passing-brightgreen?style=plastic)](https://github.com/Gunabana/MoneyManager/actions/runs/12043833609)
-[![badge_bandit](https://img.shields.io/badge/bandit-passing-brightgreen?style=plastic)](https://github.com/Gunabana/MoneyManager/actions/runs/12043833609)
+[![badge_pylint](https://img.shields.io/badge/pylint-10.00-brightgreen?style=plastic)](https://github.com/Gunabana/MoneyManager/actions/runs/12044031981)
+[![badge_black](https://img.shields.io/badge/black_formatter-passing-brightgreen?style=plastic&labelColor=black)](https://github.com/Gunabana/MoneyManager/actions/runs/12044031981)
+[![badge_mypy](https://img.shields.io/badge/mypy-passing-brightgreen?style=plastic)](https://github.com/Gunabana/MoneyManager/actions/runs/12044031981)
+[![badge_bandit](https://img.shields.io/badge/bandit-passing-brightgreen?style=plastic)](https://github.com/Gunabana/MoneyManager/actions/runs/12044031981)
 
 
 ### Standards
