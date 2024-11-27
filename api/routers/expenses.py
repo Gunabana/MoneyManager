@@ -398,10 +398,9 @@ async def update_expense(
     raise HTTPException(status_code=500, detail="Failed to update expense")
 
 
-
 @router.get("/export/excel")
 async def export_expenses_to_excel(token: str = Header(None)):
-    """ Export expense data to an Excel file """
+    """Export expense data to an Excel file"""
     user_id = await verify_token(token)
     expenses = await expenses_collection.find({"user_id": user_id}).to_list(None)
 
@@ -548,4 +547,6 @@ async def import_expenses_from_csv(
         return {"message": "Expenses imported successfully."}
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to process CSV: {str(e)}") from e
+        raise HTTPException(
+            status_code=500, detail=f"Failed to process CSV: {str(e)}"
+        ) from e
