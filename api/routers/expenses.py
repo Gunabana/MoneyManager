@@ -442,9 +442,9 @@ async def export_expenses_to_excel(token: str = Header(None)):
                 try:
                     if cell.value:
                         max_length = max(max_length, len(str(cell.value)))
-                except:  # pylint: disable=W0702
+                except:  # pylint: disable=W0702  # nosec B110
                     pass
-            adjusted_width = max_length + 2  # Add some padding
+            adjusted_width = max_length + 2
             sheet.column_dimensions[column_letter].width = adjusted_width
 
     output.seek(0)
